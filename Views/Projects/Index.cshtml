@@ -1,0 +1,73 @@
+@model ZE.ViewModels.ProjectListViewModel
+@{
+    ViewData["Title"] = "Our Projects";
+    ViewData["Description"] = "Explore projects designed and built by ZE — web applications, business websites and full-stack products powered by ASP.NET Core, SQL Server and React.";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a> <span>/</span> <span aria-current="page">Projects</span>
+        </nav>
+        <h1>Our <span class="gold">Projects</span></h1>
+        <p class="page-lead">Real products, shipped for real people — designed, built and maintained by ZE.</p>
+
+        <form class="search-bar" method="get" action="/projects" role="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" name="q" value="@Model.Query" placeholder="Search projects or technologies…" aria-label="Search projects" />
+            <button type="submit" class="btn btn-sm btn-gold">Search</button>
+            @if (!string.IsNullOrWhiteSpace(Model.Query))
+            {
+                <a href="/projects" class="btn btn-sm btn-ghost">Clear</a>
+            }
+        </form>
+    </div>
+</section>
+
+<section class="section projects-section">
+    <div class="container">
+        <div class="projects-meta">
+            <span>@Model.TotalCount project@(Model.TotalCount == 1 ? "" : "s") found</span>
+        </div>
+
+        @if (Model.Projects.Count == 0)
+        {
+            <div class="empty-state glass-card">
+                <i class="fa-regular fa-folder-open"></i>
+                <h3>No projects found</h3>
+                <p>Try a different search — or check back soon, we're always building something new.</p>
+                <a href="/projects" class="btn btn-gold">View all projects</a>
+            </div>
+        }
+        else
+        {
+            <div class="projects-grid">
+                @foreach (var project in Model.Projects)
+                {
+                    <partial name="_ProjectCard" model="project" />
+                }
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="pager" aria-label="Projects pagination">
+                    @for (var i = 1; i <= Model.TotalPages; i++)
+                    {
+                        var active = i == Model.Page ? "page-link active" : "page-link";
+                        <a class="@active" href="/projects?page=@i&q=@Uri.EscapeDataString(Model.Query ?? "")">@i</a>
+                    }
+                </nav>
+            }
+        }
+    </div>
+</section>
+
+<section class="section cta-strip">
+    <div class="container cta-inner glass-card" data-reveal>
+        <div>
+            <h2>Have an idea? Let's <span class="script gold">build it</span>.</h2>
+            <p>Tell us about your project and we'll get back to you within one business day.</p>
+        </div>
+        <a class="btn btn-gold" href="/contact">Get In Touch <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+</section>

@@ -1,0 +1,115 @@
+@model ProjectDetailsViewModel
+@{
+    var project = Model.Project;
+    ViewData["Title"] = project.Title;
+    ViewData["Description"] = project.ShortDescription;
+}
+
+<section class="page-hero project-hero">
+    <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a> <span>/</span>
+            <a href="/projects">Projects</a> <span>/</span>
+            <span aria-current="page">@project.Title</span>
+        </nav>
+
+        <div class="tech-badges">
+            @foreach (var link in project.Technologies)
+            {
+                <span class="tech-badge">@link.Technology.Name</span>
+            }
+        </div>
+
+        <h1>@project.Title</h1>
+        <p class="page-lead">@project.ShortDescription</p>
+
+        <div class="project-meta-row">
+            <span><i class="fa-regular fa-calendar"></i> @project.CreatedAt.ToString("MMMM yyyy")</span>
+            @if (!string.IsNullOrEmpty(project.LiveUrl))
+            {
+                <a href="@project.LiveUrl" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+            }
+            @if (!string.IsNullOrEmpty(project.GithubUrl))
+            {
+                <a href="@project.GithubUrl" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Source Code</a>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section project-details">
+    <div class="container">
+        <figure class="details-cover" data-reveal>
+            <img src="@(string.IsNullOrEmpty(project.ImageUrl) ? Url.Content("~/images/browser-window.png") : project.ImageUrl)"
+                 alt="@project.Title — cover image" />
+        </figure>
+
+        <div class="details-grid">
+            <article class="details-body" data-reveal>
+                <h2>About this project</h2>
+                @foreach (var paragraph in project.Description.Split("\n", StringSplitOptions.RemoveEmptyEntries))
+                {
+                    <p>@paragraph.Trim()</p>
+                }
+            </article>
+
+            <aside class="details-side glass-card" data-reveal>
+                <h3>Technology</h3>
+                <ul class="side-list">
+                    @foreach (var link in project.Technologies)
+                    {
+                        <li>
+                            @if (!string.IsNullOrEmpty(link.Technology.IconClass))
+                            {
+                                <i class="@link.Technology.IconClass" aria-hidden="true"></i>
+                            }
+                            else if (!string.IsNullOrEmpty(link.Technology.IconUrl))
+                            {
+                                <img src="@link.Technology.IconUrl" alt="" aria-hidden="true" />
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+                            }
+                            @link.Technology.Name
+                        </li>
+                    }
+                </ul>
+
+                <div class="side-actions">
+                    @if (!string.IsNullOrEmpty(project.LiveUrl))
+                    {
+                        <a class="btn btn-gold btn-block" href="@project.LiveUrl" target="_blank" rel="noopener">
+                            Visit Live Site <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    }
+                    @if (!string.IsNullOrEmpty(project.GithubUrl))
+                    {
+                        <a class="btn btn-ghost btn-block" href="@project.GithubUrl" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github"></i> View on GitHub
+                        </a>
+                    }
+                    <a class="btn btn-ghost btn-block" href="/projects">
+                        <i class="fa-solid fa-arrow-left"></i> All Projects
+                    </a>
+                </div>
+            </aside>
+        </div>
+
+        @if (Model.RelatedProjects.Count > 0)
+        {
+            <div class="related">
+                <div class="section-head inline">
+                    <h3>You may also like</h3>
+                    <a class="link-arrow" href="/projects">View All <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div class="projects-grid">
+                    @foreach (var related in Model.RelatedProjects)
+                    {
+                        <partial name="_ProjectCard" model="related" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>

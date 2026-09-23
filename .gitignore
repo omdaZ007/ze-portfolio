@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+out/
+
+# SQLite database (created automatically on first run)
+*.db
+*.db-wal
+*.db-shm
+
+# IDE / user state
+.vs/
+*.user
+*.suo
+.idea/
+
+# Logs
+*.log
+logs/
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store

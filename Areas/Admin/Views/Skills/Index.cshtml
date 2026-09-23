@@ -1,0 +1,82 @@
+@model List<ZE.Models.Skill>
+@{
+    ViewData["Title"] = "Skills";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-bolt"></i> Skills</h1>
+        <p>Skills shown in the “Skills” section of the homepage.</p>
+    </div>
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Skills" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New skill
+    </a>
+</div>
+
+<section class="admin-panel glass-card">
+    <form method="get" class="admin-toolbar" data-reset-page>
+        <input type="text" name="q" value="@ViewBag.Query" class="form-control" placeholder="Search skill or category…" aria-label="Search skills" />
+        <button type="submit" class="admin-btn admin-btn-ghost admin-btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="admin-empty-inline">No skills found.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Skill</th>
+                        <th>Category</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@s.Name</strong>
+                            <span class="sub">@s.Icon</span>
+                        </td>
+                        <td>@(s.Category ?? "—")</td>
+                        <td>@s.DisplayOrder</td>
+                        <td>
+                            @if (s.IsActive)
+                            {
+                                <span class="admin-pill admin-pill-green">Visible</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-muted">Hidden</span>
+                            }
+                        </td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Skills" asp-action="Edit" asp-route-id="@s.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <form asp-area="Admin" asp-controller="Skills" asp-action="Toggle" asp-route-id="@s.Id" method="post">
+                                <button type="submit" class="admin-icon-btn" title="@(s.IsActive ? "Hide" : "Show")">
+                                    <i class="fa-solid @(s.IsActive ? "fa-eye-slash" : "fa-eye")"></i>
+                                </button>
+                            </form>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Skills", new { area = "Admin", id = s.Id })"
+                                    data-confirm-message="Delete skill “@s.Name”?"
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

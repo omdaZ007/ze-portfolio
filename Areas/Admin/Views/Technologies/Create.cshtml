@@ -1,0 +1,47 @@
+@model ZE.ViewModels.TechnologyFormViewModel
+@{
+    ViewData["Title"] = "New technology";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-plus"></i> New technology</h1>
+        <p>Add a technology that can be tagged on projects.</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Technologies" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to technologies
+    </a>
+</div>
+
+<section class="admin-panel glass-card admin-form">
+    <form method="post" asp-area="Admin" asp-controller="Technologies" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="field-validation"></div>
+
+        <div class="admin-form-grid">
+            <div class="form-group full">
+                <label asp-for="Name"><i class="fa-solid fa-microchip"></i> Name *</label>
+                <input asp-for="Name" class="form-control" placeholder="ASP.NET Core" autofocus />
+                <span asp-validation-for="Name" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IconClass"><i class="fa-solid fa-icons"></i> Icon class</label>
+                <input asp-for="IconClass" class="form-control" placeholder="fa-brands fa-html5" />
+                <span asp-validation-for="IconClass" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IconUrl"><i class="fa-solid fa-link"></i> Icon URL / path</label>
+                <input asp-for="IconUrl" class="form-control" placeholder="/images/icon-dotnet.png" />
+                <span asp-validation-for="IconUrl" class="field-validation"></span>
+            </div>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-gold"><i class="fa-solid fa-floppy-disk"></i> Create technology</button>
+            <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Technologies" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

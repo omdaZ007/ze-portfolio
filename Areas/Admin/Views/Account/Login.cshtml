@@ -1,0 +1,69 @@
+@model ZE.ViewModels.LoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin Login";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin Login — ZE</title>
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body admin-login-page">
+    <div class="admin-login-wrap">
+        <div class="admin-login-card glass-card">
+            <div class="admin-login-brand">
+                <img src="~/images/logo-nav.png" alt="ZE logo" />
+                <h1>ZE <span class="script">Admin</span></h1>
+                <p>Sign in to manage your portfolio content.</p>
+            </div>
+
+            @if (ViewData.ModelState.ErrorCount > 0)
+            {
+                <div class="admin-alert admin-alert-danger">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <div asp-validation-summary="All"></div>
+                </div>
+            }
+
+            <form asp-area="Admin" asp-controller="Account" asp-action="Login" method="post" class="admin-login-form">
+                <input type="hidden" asp-for="ReturnUrl" />
+                <div class="form-group">
+                    <label asp-for="Email"><i class="fa-solid fa-envelope"></i> Email</label>
+                    <input asp-for="Email" class="form-control" autocomplete="username" placeholder="admin@example.com" autofocus />
+                    <span asp-validation-for="Email" class="field-validation"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password"><i class="fa-solid fa-lock"></i> Password</label>
+                    <div class="admin-password-wrap">
+                        <input asp-for="Password" class="form-control" autocomplete="current-password" placeholder="••••••••" />
+                        <button type="button" class="admin-password-toggle" aria-label="Show password">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="field-validation"></span>
+                </div>
+                <label class="admin-remember">
+                    <input asp-for="RememberMe" /> Keep me signed in
+                </label>
+                <button type="submit" class="admin-btn admin-btn-gold admin-btn-block">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign in
+                </button>
+            </form>
+
+            <a class="admin-login-back" href="~/"><i class="fa-solid fa-arrow-left"></i> Back to website</a>
+        </div>
+    </div>
+
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+</body>
+</html>

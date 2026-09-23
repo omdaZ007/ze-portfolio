@@ -1,0 +1,80 @@
+@model List<ZE.Models.Service>
+@{
+    ViewData["Title"] = "Services";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-layer-group"></i> Services</h1>
+        <p>Services offered, shown on the homepage.</p>
+    </div>
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Services" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New service
+    </a>
+</div>
+
+<section class="admin-panel glass-card">
+    <form method="get" class="admin-toolbar" data-reset-page>
+        <input type="text" name="q" value="@ViewBag.Query" class="form-control" placeholder="Search services…" aria-label="Search services" />
+        <button type="submit" class="admin-btn admin-btn-ghost admin-btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <div class="admin-empty-inline">No services found.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@s.Title</strong>
+                            <span class="sub">@(s.Description.Length > 90 ? s.Description[..90] + "…" : s.Description)</span>
+                        </td>
+                        <td>@s.DisplayOrder</td>
+                        <td>
+                            @if (s.IsActive)
+                            {
+                                <span class="admin-pill admin-pill-green">Visible</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-muted">Hidden</span>
+                            }
+                        </td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Services" asp-action="Edit" asp-route-id="@s.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <form asp-area="Admin" asp-controller="Services" asp-action="Toggle" asp-route-id="@s.Id" method="post">
+                                <button type="submit" class="admin-icon-btn" title="@(s.IsActive ? "Hide" : "Show")">
+                                    <i class="fa-solid @(s.IsActive ? "fa-eye-slash" : "fa-eye")"></i>
+                                </button>
+                            </form>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Services", new { area = "Admin", id = s.Id })"
+                                    data-confirm-message="Delete service “@s.Title”?"
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

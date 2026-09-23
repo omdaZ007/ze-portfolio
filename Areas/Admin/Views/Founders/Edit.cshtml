@@ -1,0 +1,97 @@
+@model ZE.ViewModels.FounderFormViewModel
+@{
+    ViewData["Title"] = "Edit founder";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-pen"></i> Edit founder</h1>
+        <p>Update this founder’s details.</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Founders" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to founders
+    </a>
+</div>
+
+<section class="admin-panel glass-card admin-form">
+    <form method="post" enctype="multipart/form-data" asp-area="Admin" asp-controller="Founders" asp-action="Edit" asp-route-id="@Model.Id">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ExistingImageUrl" />
+        <div asp-validation-summary="ModelOnly" class="field-validation"></div>
+
+        <div class="admin-form-grid">
+            <div class="form-group">
+                <label asp-for="Name"><i class="fa-solid fa-user"></i> Name *</label>
+                <input asp-for="Name" class="form-control" autofocus />
+                <span asp-validation-for="Name" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccentColor"><i class="fa-solid fa-palette"></i> Accent color</label>
+                <input asp-for="AccentColor" class="form-control" />
+                <span asp-validation-for="AccentColor" class="field-validation"></span>
+                <span class="input-hint">Gold #F5B942 · Electric blue #168BFF</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Role"><i class="fa-solid fa-id-badge"></i> Role *</label>
+                <input asp-for="Role" class="form-control" />
+                <span asp-validation-for="Role" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JobTitle"><i class="fa-solid fa-briefcase"></i> Job title *</label>
+                <input asp-for="JobTitle" class="form-control" />
+                <span asp-validation-for="JobTitle" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Bio"><i class="fa-solid fa-align-left"></i> Bio *</label>
+                <textarea asp-for="Bio" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Bio" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="ImageFile"><i class="fa-solid fa-camera"></i> Photo</label>
+                @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+                {
+                    <div class="admin-image-preview" id="existingFounderPreview">
+                        <img src="@Model.ExistingImageUrl" alt="Current photo" />
+                    </div>
+                }
+                <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" data-preview="#existingFounderPreview" style="margin-top:12px" />
+                <span asp-validation-for="ImageFile" class="field-validation"></span>
+                <span class="input-hint">JPG, PNG or WEBP — max 5 MB. Leave empty to keep the current photo.</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="GithubUrl"><i class="fa-brands fa-github"></i> GitHub URL</label>
+                <input asp-for="GithubUrl" class="form-control" />
+                <span asp-validation-for="GithubUrl" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LinkedInUrl"><i class="fa-brands fa-linkedin"></i> LinkedIn URL</label>
+                <input asp-for="LinkedInUrl" class="form-control" />
+                <span asp-validation-for="LinkedInUrl" class="field-validation"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DisplayOrder"><i class="fa-solid fa-arrow-down-wide-short"></i> Display order</label>
+                <input asp-for="DisplayOrder" class="form-control" type="number" />
+                <span asp-validation-for="DisplayOrder" class="field-validation"></span>
+            </div>
+            <div class="form-group" style="display:flex;align-items:flex-end">
+                <label class="admin-check w-100">
+                    <input asp-for="IsActive" /> Visible on the site
+                </label>
+            </div>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-gold"><i class="fa-solid fa-floppy-disk"></i> Save changes</button>
+            <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Founders" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

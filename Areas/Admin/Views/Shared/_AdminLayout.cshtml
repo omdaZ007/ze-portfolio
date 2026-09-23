@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>@ViewData["Title"] — ZE Admin</title>
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+    <div class="admin-shell">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-brand">
+                <img src="~/images/logo-nav.png" alt="ZE" />
+                <div>
+                    <strong>ZE Admin</strong>
+                    <span>Content Manager</span>
+                </div>
+            </div>
+            <nav class="admin-nav">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@(IsActiveNav("Dashboard") ? "active" : "")">
+                    <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="@(IsActiveNav("Projects") ? "active" : "")">
+                    <i class="fa-solid fa-folder-open"></i><span>Projects</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Technologies" asp-action="Index" class="@(IsActiveNav("Technologies") ? "active" : "")">
+                    <i class="fa-solid fa-microchip"></i><span>Technologies</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="@(IsActiveNav("Skills") ? "active" : "")">
+                    <i class="fa-solid fa-bolt"></i><span>Skills</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Services" asp-action="Index" class="@(IsActiveNav("Services") ? "active" : "")">
+                    <i class="fa-solid fa-layer-group"></i><span>Services</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Founders" asp-action="Index" class="@(IsActiveNav("Founders") ? "active" : "")">
+                    <i class="fa-solid fa-user-group"></i><span>Founders</span>
+                </a>
+                <a asp-area="Admin" asp-controller="Messages" asp-action="Index" class="@(IsActiveNav("Messages") ? "active" : "")">
+                    <i class="fa-solid fa-envelope"></i><span>Messages</span>
+                    @await Component.InvokeAsync("UnreadMessageBadge")
+                </a>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <a href="~/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View site</a>
+                <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                    <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                </form>
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-topbar">
+                <button class="admin-burger" id="adminSidebarToggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="admin-topbar-title">@ViewData["Title"]</div>
+                <div class="admin-topbar-user">
+                    <span class="admin-avatar"><i class="fa-solid fa-user-shield"></i></span>
+                    <span>@User.Identity?.Name</span>
+                </div>
+            </header>
+
+            @if (TempData["Success"] is string success)
+            {
+                <div class="admin-alert admin-alert-success" data-auto-dismiss>
+                    <i class="fa-solid fa-circle-check"></i> @success
+                    <button type="button" class="admin-alert-close" aria-label="Close">&times;</button>
+                </div>
+            }
+            @if (TempData["Error"] is string error)
+            {
+                <div class="admin-alert admin-alert-danger" data-auto-dismiss>
+                    <i class="fa-solid fa-circle-exclamation"></i> @error
+                    <button type="button" class="admin-alert-close" aria-label="Close">&times;</button>
+                </div>
+            }
+
+            <main class="admin-content">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+@functions {
+    private bool IsActiveNav(string controller) =>
+        string.Equals(ViewContext.RouteData.Values["controller"]?.ToString(), controller,
+            StringComparison.OrdinalIgnoreCase);
+}

@@ -1,0 +1,14 @@
+<div class="admin-modal" id="confirmDeleteModal" hidden>
+    <div class="admin-modal-backdrop" data-confirm-cancel></div>
+    <div class="admin-modal-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmDeleteTitle">
+        <h3 id="confirmDeleteTitle"><i class="fa-solid fa-triangle-exclamation"></i> Confirm delete</h3>
+        <p id="confirmDeleteMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
+        <form method="post" id="confirmDeleteForm">
+            @Html.AntiForgeryToken()
+            <div class="admin-modal-actions">
+                <button type="button" class="admin-btn admin-btn-ghost" data-confirm-cancel>Cancel</button>
+                <button type="submit" class="admin-btn admin-btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+            </div>
+        </form>
+    </div>
+</div>

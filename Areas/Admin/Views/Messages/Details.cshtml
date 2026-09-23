@@ -1,0 +1,64 @@
+@model ZE.Models.ContactMessage
+@{
+    ViewData["Title"] = "Message";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-envelope"></i> Message from @Model.Name</h1>
+        <p>Received @Model.CreatedAt.ToString("dddd, MMM d yyyy 'at' HH:mm") UTC</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Messages" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to messages
+    </a>
+</div>
+
+<div class="admin-detail-grid">
+    <section class="admin-panel glass-card">
+        <header class="admin-panel-header">
+            <h2><i class="fa-solid fa-comment"></i> @(Model.ProjectType ?? "General inquiry")</h2>
+            @if (Model.IsRead)
+            {
+                <span class="admin-pill admin-pill-muted">Read</span>
+            }
+            else
+            {
+                <span class="admin-pill admin-pill-gold">Unread</span>
+            }
+        </header>
+        <div class="admin-detail-body">@Model.Message</div>
+    </section>
+
+    <aside class="admin-panel glass-card">
+        <header class="admin-panel-header">
+            <h2><i class="fa-solid fa-circle-info"></i> Details</h2>
+        </header>
+        <div class="admin-meta-list">
+            <div><span>Name</span><span>@Model.Name</span></div>
+            <div><span>Email</span><span><a href="mailto:@Model.Email?subject=Re: your message to ZE">@Model.Email</a></span></div>
+            <div><span>Project type</span><span>@(Model.ProjectType ?? "—")</span></div>
+            <div><span>Received</span><span>@Model.CreatedAt.ToString("MMM d, yyyy HH:mm")</span></div>
+        </div>
+
+        <div class="admin-form-actions">
+            <a class="admin-btn admin-btn-blue admin-btn-sm" href="mailto:@Model.Email?subject=Re: your message to ZE">
+                <i class="fa-solid fa-reply"></i> Reply by email
+            </a>
+            <form asp-area="Admin" asp-controller="Messages" asp-action="MarkRead" asp-route-id="@Model.Id" method="post">
+                <input type="hidden" name="isRead" value="@(!Model.IsRead)" />
+                <button type="submit" class="admin-btn admin-btn-ghost admin-btn-sm">
+                    <i class="fa-solid fa-envelope-@(Model.IsRead ? "raw" : "open")"></i>
+                    Mark as @(Model.IsRead ? "unread" : "read")
+                </button>
+            </form>
+            <button type="button"
+                    class="admin-btn admin-btn-danger admin-btn-sm"
+                    data-confirm-href="@Url.Action("Delete", "Messages", new { area = "Admin", id = Model.Id })"
+                    data-confirm-message="Delete message from @Model.Name?">
+                <i class="fa-solid fa-trash"></i> Delete
+            </button>
+        </div>
+    </aside>
+</div>
+
+<partial name="_ConfirmDelete" />

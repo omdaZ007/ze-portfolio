@@ -1,0 +1,137 @@
+@model ZE.ViewModels.ProjectListViewModel
+@{
+    ViewData["Title"] = "Projects";
+    var stats = ViewBag.Stats;
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-folder-open"></i> Projects</h1>
+        <p>Create, edit and publish your portfolio projects.</p>
+    </div>
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Projects" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New project
+    </a>
+</div>
+
+@if (stats != null)
+{
+    <div class="admin-stats-row">
+        <span class="admin-pill admin-pill-blue">Total: @stats.Total</span>
+        <span class="admin-pill admin-pill-green">Published: @stats.Published</span>
+        <span class="admin-pill admin-pill-muted">Drafts: @stats.Drafts</span>
+    </div>
+}
+
+<section class="admin-panel glass-card">
+    <form method="get" class="admin-toolbar" data-reset-page>
+        <input type="hidden" name="page" value="1" />
+        <input type="text" name="q" value="@Model.Query" class="form-control" placeholder="Search title or description…" aria-label="Search projects" />
+        <select name="status" class="form-control" aria-label="Filter by status">
+            <option value="" selected="@(string.IsNullOrEmpty(Model.Status))">All statuses</option>
+            <option value="published" selected="@(Model.Status == "published")">Published</option>
+            <option value="draft" selected="@(Model.Status == "draft")">Draft</option>
+            <option value="featured" selected="@(Model.Status == "featured")">Featured</option>
+        </select>
+        <button type="submit" class="admin-btn admin-btn-ghost admin-btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+    </form>
+
+    @if (!Model.Projects.Any())
+    {
+        <div class="admin-empty-inline">No projects match your search.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Project</th>
+                        <th>Status</th>
+                        <th>Updated</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model.Projects)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(p.ImageUrl))
+                            {
+                                <img class="admin-thumb" src="@p.ImageUrl" alt="@p.Title" />
+                            }
+                            else
+                            {
+                                <span class="admin-thumb"></span>
+                            }
+                        </td>
+                        <td>
+                            <strong>@p.Title</strong>
+                            <span class="sub">/@p.Slug</span>
+                        </td>
+                        <td>
+                            @if (p.IsPublished)
+                            {
+                                <span class="admin-pill admin-pill-green">Published</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-muted">Draft</span>
+                            }
+                            @if (p.IsFeatured)
+                            {
+                                <span class="admin-pill admin-pill-gold">Featured</span>
+                            }
+                        </td>
+                        <td>
+                            @((p.UpdatedAt ?? p.CreatedAt).ToString("MMM d, yyyy"))
+                        </td>
+                        <td class="admin-table-actions">
+                            @if (p.IsPublished)
+                            {
+                                <a class="admin-icon-btn" href="~/projects/@p.Slug" target="_blank" title="View on site"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            }
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Projects" asp-action="Edit" asp-route-id="@p.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <form asp-area="Admin" asp-controller="Projects" asp-action="TogglePublish" asp-route-id="@p.Id" method="post">
+                                <button type="submit" class="admin-icon-btn" title="@(p.IsPublished ? "Unpublish" : "Publish")">
+                                    <i class="fa-solid @(p.IsPublished ? "fa-eye-slash" : "fa-eye")"></i>
+                                </button>
+                            </form>
+                            <form asp-area="Admin" asp-controller="Projects" asp-action="ToggleFeatured" asp-route-id="@p.Id" method="post">
+                                <button type="submit" class="admin-icon-btn gold" title="@(p.IsFeatured ? "Remove from featured" : "Mark as featured")">
+                                    <i class="fa-solid @(p.IsFeatured ? "fa-star-half-stroke" : "fa-star")"></i>
+                                </button>
+                            </form>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Projects", new { area = "Admin", id = p.Id })"
+                                    data-confirm-message="Delete “@p.Title”? This cannot be undone."
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="admin-pager" aria-label="Pagination">
+                @for (int pg = 1; pg <= Model.TotalPages; pg++)
+                {
+                    if (pg == 1 || pg == Model.TotalPages || (pg >= Model.Page - 2 && pg <= Model.Page + 2))
+                    {
+                        <a class="@(pg == Model.Page ? "active" : "")"
+                           href="@Url.Action("Index", new { page = pg, q = Model.Query, status = Model.Status })">@pg</a>
+                    }
+                }
+            </nav>
+        }
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

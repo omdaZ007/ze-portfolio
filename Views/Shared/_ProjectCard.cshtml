@@ -1,0 +1,41 @@
+@model Project
+<article class="project-card" data-reveal>
+    <a class="project-media" href="/projects/@Model.Slug" aria-label="@Model.Title">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="@Model.Title — project preview" loading="lazy" />
+        }
+        else
+        {
+            <img src="~/images/browser-window.png" alt="@Model.Title" loading="lazy" />
+        }
+        @if (Model.IsFeatured)
+        {
+            <span class="project-flag"><i class="fa-solid fa-star"></i> Featured</span>
+        }
+    </a>
+    <div class="project-body">
+        @if (Model.Technologies.Count > 0)
+        {
+            <div class="tech-badges">
+                @foreach (var link in Model.Technologies.Take(4))
+                {
+                    <span class="tech-badge">@link.Technology.Name</span>
+                }
+            </div>
+        }
+        <h3><a href="/projects/@Model.Slug">@Model.Title</a></h3>
+        <p>@Model.ShortDescription</p>
+        <div class="project-actions">
+            <a class="btn btn-sm btn-gold" href="/projects/@Model.Slug">Case Study <i class="fa-solid fa-arrow-right"></i></a>
+            @if (!string.IsNullOrEmpty(Model.LiveUrl))
+            {
+                <a class="btn btn-sm btn-ghost" href="@Model.LiveUrl" target="_blank" rel="noopener">Live Demo <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            }
+            @if (!string.IsNullOrEmpty(Model.GithubUrl))
+            {
+                <a class="btn btn-sm btn-ghost icon-only" href="@Model.GithubUrl" target="_blank" rel="noopener" aria-label="GitHub repository for @Model.Title"><i class="fa-brands fa-github"></i></a>
+            }
+        </div>
+    </div>
+</article>

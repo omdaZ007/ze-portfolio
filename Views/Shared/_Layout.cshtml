@@ -1,0 +1,56 @@
+@using ZE.ViewModels
+@{
+    var title = ViewData["Title"] as string;
+    var description = ViewData["Description"] as string
+        ?? "ZE is a web development studio founded by Ziad Fayed and Mohamed Emad — building clean, modern and responsive websites, full-stack web applications and digital experiences.";
+    var fullTitle = string.IsNullOrWhiteSpace(title)
+        ? "ZE — Web Development, Full-Stack Development & Digital Experiences"
+        : title + " — ZE";
+    var canonical = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@fullTitle</title>
+    <meta name="description" content="@description" />
+    <meta name="author" content="ZE — Ziad Fayed & Mohamed Emad" />
+    <meta name="keywords" content="web development, full-stack development, digital experiences, ASP.NET Core, React, ZE" />
+    <link rel="canonical" href="@canonical" />
+    <link rel="icon" type="image/png" href="~/images/favicon.png" asp-append-version="true" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ZE" />
+    <meta property="og:title" content="@fullTitle" />
+    <meta property="og:description" content="@description" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:image" content="@(Context.Request.Scheme + "://" + Context.Request.Host + "/images/ze-hero-logo.png")" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@fullTitle" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@(Context.Request.Scheme + "://" + Context.Request.Host + "/images/ze-hero-logo.png")" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Yellowtail&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <partial name="_Navbar" />
+
+    <main id="main-content">
+        @RenderBody()
+    </main>
+
+    <partial name="_Footer" />
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

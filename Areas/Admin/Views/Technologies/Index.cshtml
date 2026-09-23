@@ -1,0 +1,70 @@
+@model List<ZE.Areas.Admin.Controllers.TechnologyUsageViewModel>
+@{
+    ViewData["Title"] = "Technologies";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-microchip"></i> Technologies</h1>
+        <p>Technologies you can attach to projects (M:N).</p>
+    </div>
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Technologies" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New technology
+    </a>
+</div>
+
+<section class="admin-panel glass-card">
+    @if (!Model.Any())
+    {
+        <div class="admin-empty-inline">No technologies yet.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Icon</th>
+                        <th>Used in</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    var t = item.Technology;
+                    <tr>
+                        <td><strong>@t.Name</strong></td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(t.IconUrl))
+                            {
+                                <img src="@t.IconUrl" alt="@t.Name" style="height:26px;width:auto" />
+                            }
+                            else
+                            {
+                                <span class="sub">@(t.IconClass ?? "—")</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="admin-pill admin-pill-blue">@item.ProjectCount project(s)</span>
+                        </td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Technologies" asp-action="Edit" asp-route-id="@t.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Technologies", new { area = "Admin", id = t.Id })"
+                                    data-confirm-message="Delete technology “@t.Name”? It will be removed from @item.ProjectCount project(s)."
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

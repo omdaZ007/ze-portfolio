@@ -1,0 +1,61 @@
+@model ZE.ViewModels.ServiceFormViewModel
+@{
+    ViewData["Title"] = "New service";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-plus"></i> New service</h1>
+        <p>Add a service you offer.</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Services" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to services
+    </a>
+</div>
+
+<section class="admin-panel glass-card admin-form">
+    <form method="post" asp-area="Admin" asp-controller="Services" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="field-validation"></div>
+
+        <div class="admin-form-grid">
+            <div class="form-group full">
+                <label asp-for="Title"><i class="fa-solid fa-heading"></i> Title *</label>
+                <input asp-for="Title" class="form-control" placeholder="Web Development" autofocus />
+                <span asp-validation-for="Title" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Description"><i class="fa-solid fa-align-left"></i> Description *</label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="What this service includes…"></textarea>
+                <span asp-validation-for="Description" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Icon"><i class="fa-solid fa-icons"></i> Icon *</label>
+                <input asp-for="Icon" class="form-control" placeholder="fa-solid fa-code" />
+                <span asp-validation-for="Icon" class="field-validation"></span>
+                <span class="input-hint">Font Awesome class or an image path under wwwroot.</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DisplayOrder"><i class="fa-solid fa-arrow-down-wide-short"></i> Display order</label>
+                <input asp-for="DisplayOrder" class="form-control" type="number" />
+                <span asp-validation-for="DisplayOrder" class="field-validation"></span>
+            </div>
+            <div class="form-group" style="display:flex;align-items:flex-end">
+                <label class="admin-check w-100">
+                    <input asp-for="IsActive" /> Visible on the site
+                </label>
+            </div>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-gold"><i class="fa-solid fa-floppy-disk"></i> Create service</button>
+            <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Services" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

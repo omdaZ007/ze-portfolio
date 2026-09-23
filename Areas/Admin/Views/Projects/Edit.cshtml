@@ -1,0 +1,106 @@
+@model ZE.ViewModels.ProjectFormViewModel
+@{
+    ViewData["Title"] = "Edit project";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-pen"></i> Edit project</h1>
+        <p>Update content, technologies and publishing state.</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Projects" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to projects
+    </a>
+</div>
+
+<section class="admin-panel glass-card admin-form">
+    <form method="post" enctype="multipart/form-data" asp-area="Admin" asp-controller="Projects" asp-action="Edit" asp-route-id="@Model.Id">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ExistingImageUrl" />
+        <div asp-validation-summary="ModelOnly" class="field-validation"></div>
+
+        <div class="admin-form-grid">
+            <div class="form-group">
+                <label asp-for="Title"><i class="fa-solid fa-heading"></i> Title *</label>
+                <input asp-for="Title" class="form-control" autofocus />
+                <span asp-validation-for="Title" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Slug"><i class="fa-solid fa-link"></i> Slug</label>
+                <input asp-for="Slug" class="form-control" />
+                <span asp-validation-for="Slug" class="field-validation"></span>
+                <span class="input-hint">URL: /projects/your-slug (auto if empty)</span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="ShortDescription"><i class="fa-solid fa-align-left"></i> Short description *</label>
+                <textarea asp-for="ShortDescription" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="ShortDescription" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Description"><i class="fa-solid fa-file-lines"></i> Full description *</label>
+                <textarea asp-for="Description" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="Description" class="field-validation"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LiveUrl"><i class="fa-solid fa-globe"></i> Live demo URL</label>
+                <input asp-for="LiveUrl" class="form-control" />
+                <span asp-validation-for="LiveUrl" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GithubUrl"><i class="fa-brands fa-github"></i> GitHub URL</label>
+                <input asp-for="GithubUrl" class="form-control" />
+                <span asp-validation-for="GithubUrl" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="ImageFile"><i class="fa-solid fa-image"></i> Cover image</label>
+                @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+                {
+                    <div class="admin-image-preview" id="existingProjectPreview">
+                        <img src="@Model.ExistingImageUrl" alt="Current cover" />
+                    </div>
+                }
+                <input asp-for="ImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" data-preview="#existingProjectPreview" style="margin-top:12px" />
+                <span asp-validation-for="ImageFile" class="field-validation"></span>
+                <span class="input-hint">JPG, PNG or WEBP — max 5 MB. Leave empty to keep the current image.</span>
+                @if (!string.IsNullOrEmpty(Model.ExistingImageUrl))
+                {
+                    <label class="admin-check" style="margin-top:10px">
+                        <input asp-for="RemoveImage" /> Remove current image
+                    </label>
+                }
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="SelectedTechnologyIds"><i class="fa-solid fa-microchip"></i> Technologies</label>
+                <select asp-for="SelectedTechnologyIds"
+                        asp-items="Model.AvailableTechnologies.Select(t => new SelectListItem(t.Name, t.Id.ToString()))"
+                        multiple class="form-control"></select>
+                <span class="input-hint">Hold Ctrl/Cmd to select multiple.</span>
+            </div>
+
+            <div class="form-group full">
+                <div class="admin-check-row">
+                    <label class="admin-check">
+                        <input asp-for="IsPublished" /> Published (visible on site)
+                    </label>
+                    <label class="admin-check">
+                        <input asp-for="IsFeatured" /> Featured (shown on homepage)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-gold"><i class="fa-solid fa-floppy-disk"></i> Save changes</button>
+            <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Projects" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

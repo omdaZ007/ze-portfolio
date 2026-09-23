@@ -1,0 +1,120 @@
+@model ZE.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="admin-stats-grid">
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon gold"><i class="fa-solid fa-folder-open"></i></div>
+        <div><strong>@Model.TotalProjects</strong><span>Total projects</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon blue"><i class="fa-solid fa-eye"></i></div>
+        <div><strong>@Model.PublishedProjects</strong><span>Published</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon gold"><i class="fa-solid fa-star"></i></div>
+        <div><strong>@Model.FeaturedProjects</strong><span>Featured</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon muted"><i class="fa-solid fa-file-pen"></i></div>
+        <div><strong>@Model.DraftProjects</strong><span>Drafts</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon blue"><i class="fa-solid fa-envelope"></i></div>
+        <div><strong>@Model.UnreadMessages</strong><span>Unread messages</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon gold"><i class="fa-solid fa-microchip"></i></div>
+        <div><strong>@Model.TotalTechnologies</strong><span>Technologies</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon blue"><i class="fa-solid fa-bolt"></i></div>
+        <div><strong>@Model.TotalSkills</strong><span>Skills</span></div>
+    </div>
+    <div class="admin-stat glass-card">
+        <div class="admin-stat-icon gold"><i class="fa-solid fa-layer-group"></i></div>
+        <div><strong>@Model.TotalServices</strong><span>Services</span></div>
+    </div>
+</section>
+
+<div class="admin-quick-actions">
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Projects" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New project
+    </a>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Messages" asp-action="Index">
+        <i class="fa-solid fa-envelope"></i> Messages (@Model.TotalMessages)
+    </a>
+    <a class="admin-btn admin-btn-ghost" href="~/" target="_blank">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> View website
+    </a>
+</div>
+
+<div class="admin-columns">
+    <section class="admin-panel glass-card">
+        <header class="admin-panel-header">
+            <h2><i class="fa-solid fa-folder-open"></i> Recent projects</h2>
+            <a asp-area="Admin" asp-controller="Projects" asp-action="Index">View all</a>
+        </header>
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr><th>Title</th><th>Status</th><th>Updated</th><th></th></tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model.RecentProjects)
+                {
+                    <tr>
+                        <td>@p.Title</td>
+                        <td>
+                            @if (p.IsPublished)
+                            {
+                                <span class="admin-pill admin-pill-green">Published</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-muted">Draft</span>
+                            }
+                            @if (p.IsFeatured)
+                            {
+                                <span class="admin-pill admin-pill-gold">Featured</span>
+                            }
+                        </td>
+                        <td>@((p.UpdatedAt ?? p.CreatedAt).ToString("MMM d, yyyy"))</td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn" asp-area="Admin" asp-controller="Projects" asp-action="Edit" asp-route-id="@p.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="admin-panel glass-card">
+        <header class="admin-panel-header">
+            <h2><i class="fa-solid fa-envelope"></i> Latest messages</h2>
+            <a asp-area="Admin" asp-controller="Messages" asp-action="Index">View all</a>
+        </header>
+        @if (!Model.RecentMessages.Any())
+        {
+            <p class="admin-empty-inline">No messages yet.</p>
+        }
+        else
+        {
+            <ul class="admin-message-list">
+                @foreach (var m in Model.RecentMessages)
+                {
+                    <li>
+                        <a asp-area="Admin" asp-controller="Messages" asp-action="Details" asp-route-id="@m.Id">
+                            <strong>@m.Name</strong>
+                            @if (!m.IsRead) { <span class="admin-dot" title="Unread"></span> }
+                            <span class="admin-message-subject">@(m.ProjectType ?? "General inquiry")</span>
+                            <time>@m.CreatedAt.ToString("MMM d, HH:mm")</time>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+</div>

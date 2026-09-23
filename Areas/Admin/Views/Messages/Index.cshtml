@@ -1,0 +1,105 @@
+@model ZE.ViewModels.MessageListViewModel
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-envelope"></i> Messages</h1>
+        <p>Messages submitted through the contact form.</p>
+    </div>
+    <div class="admin-stats-row" style="margin:0">
+        <span class="admin-pill admin-pill-blue">Total: @Model.TotalCount</span>
+        <span class="admin-pill admin-pill-gold">Unread: @Model.UnreadCount</span>
+    </div>
+</div>
+
+<section class="admin-panel glass-card">
+    <div class="admin-toolbar">
+        <div class="admin-filter-tabs">
+            <a href="@Url.Action("Index", new { filter = "", q = Model.Query })" class="@(string.IsNullOrEmpty(Model.Filter) ? "active" : "")">All</a>
+            <a href="@Url.Action("Index", new { filter = "unread", q = Model.Query })" class="@(Model.Filter == "unread" ? "active" : "")">Unread</a>
+            <a href="@Url.Action("Index", new { filter = "read", q = Model.Query })" class="@(Model.Filter == "read" ? "active" : "")">Read</a>
+        </div>
+        <form method="get" class="admin-toolbar" data-reset-page style="margin:0;flex:1;justify-content:flex-end">
+            <input type="hidden" name="filter" value="@Model.Filter" />
+            <input type="hidden" name="page" value="1" />
+            <input type="text" name="q" value="@Model.Query" class="form-control" placeholder="Search name, email, message…" aria-label="Search messages" />
+            <button type="submit" class="admin-btn admin-btn-ghost admin-btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </form>
+    </div>
+
+    @if (!Model.Messages.Any())
+    {
+        <div class="admin-empty-inline">No messages found.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>Received</th>
+                        <th>Status</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var m in Model.Messages)
+                {
+                    <tr>
+                        <td>
+                            <strong>@m.Name</strong>
+                            <span class="sub">@m.Email</span>
+                        </td>
+                        <td>@(m.ProjectType ?? "General")</td>
+                        <td>
+                            <span class="sub" style="font-size:0.84rem">@(m.Message.Length > 70 ? m.Message[..70] + "…" : m.Message)</span>
+                        </td>
+                        <td>@m.CreatedAt.ToString("MMM d, yyyy HH:mm")</td>
+                        <td>
+                            @if (m.IsRead)
+                            {
+                                <span class="admin-pill admin-pill-muted">Read</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-gold">Unread</span>
+                            }
+                        </td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Messages" asp-action="Details" asp-route-id="@m.Id" title="Open"><i class="fa-solid fa-envelope-open"></i></a>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Messages", new { area = "Admin", id = m.Id })"
+                                    data-confirm-message="Delete message from @m.Name?"
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="admin-pager" aria-label="Pagination">
+                @for (int pg = 1; pg <= Model.TotalPages; pg++)
+                {
+                    if (pg == 1 || pg == Model.TotalPages || (pg >= Model.Page - 2 && pg <= Model.Page + 2))
+                    {
+                        <a class="@(pg == Model.Page ? "active" : "")"
+                           href="@Url.Action("Index", new { page = pg, filter = Model.Filter, q = Model.Query })">@pg</a>
+                    }
+                }
+            </nav>
+        }
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

@@ -1,0 +1,44 @@
+@model ContactFormViewModel
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<section class="page-hero">
+    <div class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="/">Home</a> <span>/</span> <span aria-current="page">Contact</span>
+        </nav>
+        <h1>Get In <span class="gold">Touch</span></h1>
+        <p class="page-lead">Tell us about your project — we'll get back to you within one business day.</p>
+    </div>
+</section>
+
+<section class="section contact">
+    <div class="container contact-grid">
+        <div class="contact-copy" data-reveal>
+            <span class="eyebrow">Contact ZE <span class="dash"></span></span>
+            <h2>Let's Build Something <span class="script gold">Great</span></h2>
+            <p>
+                Whether it's a business website, a full-stack web application or a redesign —
+                drop us a message and let's talk about turning your idea into a real product.
+            </p>
+
+            <ul class="contact-info">
+                <li><i class="fa-regular fa-envelope"></i> <a href="mailto:hello@ze.dev">hello@ze.dev</a></li>
+                <li><i class="fa-regular fa-clock"></i> Replies within 24 hours</li>
+                <li><i class="fa-solid fa-globe"></i> Working worldwide, remotely</li>
+            </ul>
+
+            <div class="hero-socials">
+                <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://discord.com/" target="_blank" rel="noopener" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                <a href="mailto:hello@ze.dev" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+
+        <div data-reveal>
+            <partial name="_ContactForm" model="Model" />
+        </div>
+    </div>
+</section>

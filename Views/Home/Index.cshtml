@@ -1,0 +1,331 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = null;
+}
+
+<!-- ============================== HERO ============================== -->
+<section class="hero" id="home">
+    <div class="hero-backdrop" aria-hidden="true">
+        <canvas id="hero-particles"></canvas>
+        <span class="glow-orb orb-gold"></span>
+        <span class="glow-orb orb-blue"></span>
+    </div>
+
+    <div class="container hero-inner">
+        <div class="hero-copy" data-reveal>
+            <span class="hero-eyebrow">Hello, I'm <span class="dash"></span></span>
+
+            <h1 class="hero-title">
+                Turning <span class="gold">Ideas</span><br />
+                Into <span class="script gold">Websites</span>
+            </h1>
+
+            <p class="hero-lead">
+                We build clean, modern and responsive digital experiences that turn ideas into real products.
+            </p>
+
+            <div class="hero-actions">
+                <a class="btn btn-gold" href="/projects">
+                    View Our Projects <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a class="btn btn-ghost" href="/#contact">
+                    Get In Touch <i class="fa-regular fa-paper-plane"></i>
+                </a>
+            </div>
+
+            <div class="hero-socials">
+                <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://discord.com/" target="_blank" rel="noopener" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+                <a href="mailto:hello@ze.dev" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+            </div>
+        </div>
+
+        <div class="hero-visual" data-reveal data-parallax>
+            <img class="hero-island float-slow" src="~/images/islands-small.png" alt="" aria-hidden="true" />
+            <img class="hero-logo-3d" src="~/images/ze-hero-logo.png"
+                 alt="ZE — golden and blue 3D logo floating on a futuristic island" />
+
+            <div class="glass-card hero-card card-1">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <ul>
+                    <li>Design</li>
+                    <li>Develop</li>
+                    <li>Deploy</li>
+                </ul>
+            </div>
+
+            <div class="glass-card hero-card card-2">
+                <span class="code-chip"><i class="fa-solid fa-code"></i></span>
+                <strong>Clean Code</strong>
+            </div>
+
+            <div class="glass-card hero-card card-3">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <ul class="right">
+                    <li>Better</li>
+                    <li>Faster</li>
+                    <li>Together</li>
+                </ul>
+            </div>
+
+            <img class="hero-plant float-fast" src="~/images/plant.png" alt="" aria-hidden="true" />
+        </div>
+    </div>
+
+    <a class="scroll-cue" href="#about" aria-label="Scroll down">
+        <span class="mouse"><span></span></span>
+        <span class="scroll-label">Scroll Down</span>
+    </a>
+</section>
+
+<!-- ============================== ABOUT ============================== -->
+<section class="section about" id="about">
+    <div class="container about-grid">
+        <div class="about-media" data-reveal>
+            <div class="blob-frame">
+                <img src="~/images/about-laptop.png" alt="Laptop showing code in a cozy workspace" />
+            </div>
+            <img class="about-orbit float-slow" src="~/images/orbit.png" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="about-copy" data-reveal>
+            <span class="eyebrow">About ZE <span class="dash"></span></span>
+            <h2>Turning Ideas Into <span class="script gold">Digital Experiences</span></h2>
+
+            <p>
+                ZE is a two-founder studio that combines <strong>software development</strong>,
+                <strong>full-stack development</strong>, <strong>business thinking</strong> and
+                <strong>creative design</strong> — so every idea gets both a beautiful interface
+                and a solid technical foundation.
+            </p>
+            <p>
+                From the first sketch to the deployed product, we design, build and ship websites
+                and web applications that feel fast, look premium and grow with your business.
+            </p>
+
+            <ul class="about-features">
+                <li><i class="fa-solid fa-code"></i> Clean Code</li>
+                <li><i class="fa-solid fa-bolt"></i> Fast Performance</li>
+                <li><i class="fa-solid fa-user-check"></i> User-Focused</li>
+                <li><i class="fa-solid fa-star"></i> Always Learning</li>
+            </ul>
+        </div>
+
+        <div class="about-stats" data-reveal>
+            <div class="stat-card">
+                <span class="stat-number gold">@(Model.TotalPublishedProjects + 25)</span>
+                <span class="stat-label">Projects Shipped</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number blue">2</span>
+                <span class="stat-label">Founders, One Vision</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number gold">@(Model.Skills.Count)</span>
+                <span class="stat-label">Technologies</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================== SKILLS ============================== -->
+<section class="section skills" id="skills">
+    <div class="container">
+        <div class="section-head" data-reveal>
+            <span class="eyebrow">My Skills <span class="dash"></span></span>
+            <h2>The Craft &amp; <span class="gold">Toolkit</span> Behind ZE</h2>
+        </div>
+
+        @if (Model.Skills.Count == 0)
+        {
+            <p class="empty-note">Skills are managed from the admin dashboard.</p>
+        }
+        else
+        {
+            <div class="skills-grid">
+                @foreach (var skill in Model.Skills)
+                {
+                    <div class="skill-card" data-reveal title="@skill.Name">
+                        @if (skill.Icon.StartsWith("/"))
+                        {
+                            <img src="@skill.Icon" alt="@skill.Name icon" loading="lazy" />
+                        }
+                        else
+                        {
+                            <i class="@skill.Icon" aria-hidden="true"></i>
+                        }
+                        <span>@skill.Name</span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ========================= FEATURED PROJECTS ========================= -->
+<section class="section projects" id="projects">
+    <div class="container">
+        <div class="section-head inline" data-reveal>
+            <div>
+                <span class="eyebrow">Selected Work <span class="dash"></span></span>
+                <h2>Featured <span class="gold">Projects</span></h2>
+            </div>
+            <a class="link-arrow" href="/projects">View All Projects <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+
+        @if (Model.FeaturedProjects.Count == 0)
+        {
+            <div class="empty-state glass-card">
+                <i class="fa-regular fa-folder-open"></i>
+                <h3>Featured projects coming soon</h3>
+                <p>New work is on the way — check the projects page for the latest.</p>
+                <a class="btn btn-gold" href="/projects">View All Projects</a>
+            </div>
+        }
+        else
+        {
+            <div class="projects-grid home-grid">
+                @foreach (var project in Model.FeaturedProjects)
+                {
+                    <partial name="_ProjectCard" model="project" />
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ============================ FOUNDERS ============================ -->
+<section class="section founders" id="founders">
+    <div class="container">
+        <div class="section-head centered" data-reveal>
+            <span class="eyebrow framed">Meet The Founders</span>
+            <h2>Two Minds, <span class="gold">One Vision</span></h2>
+            <p class="section-sub">
+                We're two passionate developers who turn ideas into reality.<br />
+                Different skills, same goal — building something great.
+            </p>
+            <span class="brush-underline" aria-hidden="true"></span>
+        </div>
+
+        <div class="founders-grid">
+            @foreach (var founder in Model.Founders)
+            {
+                var isGold = founder.AccentColor.StartsWith("#F5") || founder.AccentColor.StartsWith("#FFD");
+                <article class="founder-card @(isGold ? "accent-gold" : "accent-blue")" data-reveal>
+                    <div class="founder-photo">
+                        @if (!string.IsNullOrEmpty(founder.ImageUrl))
+                        {
+                            <img src="@founder.ImageUrl" alt="@founder.Name — @founder.JobTitle" loading="lazy" />
+                        }
+                        @if (isGold)
+                        {
+                            <span class="crown"><i class="fa-solid fa-crown"></i></span>
+                        }
+                    </div>
+
+                    <div class="founder-info">
+                        <h3>
+                            @{
+                                var parts = founder.Name.Split(' ', 2);
+                                <text>@parts[0] <span class="accent">@(!parts.Skip(1).Any() ? "" : string.Join(" ", parts.Skip(1)))</span></text>
+                            }
+                        </h3>
+
+                        <ul class="founder-roles">
+                            <li><i class="fa-regular fa-user"></i> @founder.Role</li>
+                            <li><i class="fa-solid fa-code"></i> @founder.JobTitle</li>
+                        </ul>
+
+                        <p class="founder-bio">@founder.Bio</p>
+
+                        <div class="founder-links">
+                            @if (!string.IsNullOrEmpty(founder.GithubUrl))
+                            {
+                                <a href="@founder.GithubUrl" target="_blank" rel="noopener" aria-label="@founder.Name on GitHub"><i class="fa-brands fa-github"></i></a>
+                            }
+                            @if (!string.IsNullOrEmpty(founder.LinkedInUrl))
+                            {
+                                <a href="@founder.LinkedInUrl" target="_blank" rel="noopener" aria-label="@founder.Name on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                            }
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+
+        <div class="founders-banner">
+            <img src="~/images/ze-nav-logo.png" alt="" aria-hidden="true" />
+            <span>Two Founders <span class="diamond">◆</span> One Journey</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============================= SERVICES ============================= -->
+<section class="section services" id="services">
+    <div class="container">
+        <div class="section-head centered" data-reveal>
+            <span class="eyebrow framed">What We Do</span>
+            <h2>Services That <span class="gold">Ship</span></h2>
+            <p class="section-sub">From a first landing page to a full-stack product — designed, built and launched.</p>
+        </div>
+
+        @if (Model.Services.Count == 0)
+        {
+            <p class="empty-note">Services are managed from the admin dashboard.</p>
+        }
+        else
+        {
+            <div class="services-grid">
+                @foreach (var service in Model.Services)
+                {
+                    <div class="service-card" data-reveal>
+                        <span class="service-icon">
+                            @if (service.Icon.StartsWith("/"))
+                            {
+                                <img src="@service.Icon" alt="" aria-hidden="true" />
+                            }
+                            else
+                            {
+                                <i class="@service.Icon" aria-hidden="true"></i>
+                            }
+                        </span>
+                        <h3>@service.Title</h3>
+                        <p>@service.Description</p>
+                        <span class="service-line" aria-hidden="true"></span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ============================= CONTACT ============================= -->
+<section class="section contact" id="contact">
+    <div class="container contact-grid">
+        <div class="contact-copy" data-reveal>
+            <span class="eyebrow">Get In Touch <span class="dash"></span></span>
+            <h2>Let's Build Something <span class="script gold">Great</span></h2>
+            <p>
+                Have a project in mind, or just want to say hello? Tell us a little about it —
+                we usually reply within one business day.
+            </p>
+
+            <ul class="contact-info">
+                <li><i class="fa-regular fa-envelope"></i> <a href="mailto:hello@ze.dev">hello@ze.dev</a></li>
+                <li><i class="fa-regular fa-clock"></i> Replies within 24 hours</li>
+                <li><i class="fa-solid fa-globe"></i> Working worldwide, remotely</li>
+            </ul>
+
+            <div class="hero-socials">
+                <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://discord.com/" target="_blank" rel="noopener" aria-label="Discord"><i class="fa-brands fa-discord"></i></a>
+            </div>
+        </div>
+
+        <div data-reveal>
+            <partial name="_ContactForm" model="Model.ContactForm" view-data='new ViewDataDictionary(ViewData) { { "ReturnUrl", "/#contact" } }' />
+        </div>
+    </div>
+</section>

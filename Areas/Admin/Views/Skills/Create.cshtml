@@ -1,0 +1,60 @@
+@model ZE.ViewModels.SkillFormViewModel
+@{
+    ViewData["Title"] = "New skill";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-plus"></i> New skill</h1>
+        <p>Add a skill to the homepage skills section.</p>
+    </div>
+    <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Skills" asp-action="Index">
+        <i class="fa-solid fa-arrow-left"></i> Back to skills
+    </a>
+</div>
+
+<section class="admin-panel glass-card admin-form">
+    <form method="post" asp-area="Admin" asp-controller="Skills" asp-action="Create">
+        <div asp-validation-summary="ModelOnly" class="field-validation"></div>
+
+        <div class="admin-form-grid">
+            <div class="form-group">
+                <label asp-for="Name"><i class="fa-solid fa-bolt"></i> Name *</label>
+                <input asp-for="Name" class="form-control" placeholder="HTML5" autofocus />
+                <span asp-validation-for="Name" class="field-validation"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category"><i class="fa-solid fa-folder"></i> Category</label>
+                <input asp-for="Category" class="form-control" placeholder="Frontend" />
+                <span asp-validation-for="Category" class="field-validation"></span>
+            </div>
+
+            <div class="form-group full">
+                <label asp-for="Icon"><i class="fa-solid fa-icons"></i> Icon *</label>
+                <input asp-for="Icon" class="form-control" placeholder="fa-brands fa-html5  (or /images/icon-html5.png)" />
+                <span asp-validation-for="Icon" class="field-validation"></span>
+                <span class="input-hint">Font Awesome class or an image path under wwwroot.</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DisplayOrder"><i class="fa-solid fa-arrow-down-wide-short"></i> Display order</label>
+                <input asp-for="DisplayOrder" class="form-control" type="number" />
+                <span asp-validation-for="DisplayOrder" class="field-validation"></span>
+            </div>
+            <div class="form-group" style="display:flex;align-items:flex-end">
+                <label class="admin-check w-100">
+                    <input asp-for="IsActive" /> Visible on the site
+                </label>
+            </div>
+        </div>
+
+        <div class="admin-form-actions">
+            <button type="submit" class="admin-btn admin-btn-gold"><i class="fa-solid fa-floppy-disk"></i> Create skill</button>
+            <a class="admin-btn admin-btn-ghost" asp-area="Admin" asp-controller="Skills" asp-action="Index">Cancel</a>
+        </div>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,31 @@
+@{
+    var path = Context.Request.Path.Value?.ToLowerInvariant() ?? "/";
+    bool Is(params string[] prefixes) => prefixes.Any(p => path.StartsWith(p));
+    var onHome = path == "/" || path == "/home";
+    string Link(string href, bool active) => active ? "nav-link active" : "nav-link";
+}
+<header class="site-navbar" id="navbar">
+    <div class="container nav-inner">
+        <a class="brand" asp-controller="Home" asp-action="Index" aria-label="ZE home">
+            <img src="~/images/ze-nav-logo.png" alt="ZE logo" class="brand-mark" asp-append-version="true" />
+        </a>
+
+        <nav class="nav-menu" id="nav-menu" aria-label="Main navigation">
+            <a class="@(Link("/", onHome))" href="/#home">Home</a>
+            <a class="@(Link("/", false))" href="/#about">About</a>
+            <a class="@(Link("/", false))" href="/#skills">Skills</a>
+            <a class="@(Is("/projects") ? "nav-link active" : "nav-link")" href="/projects">Projects</a>
+            <a class="@(Is("/contact") ? "nav-link active" : "nav-link")" href="/contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a class="btn btn-pill btn-outline-gold" href="/#contact">
+                <span class="dot"></span> Get In Touch <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+    <div class="nav-backdrop" id="nav-backdrop"></div>
+</header>

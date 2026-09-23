@@ -1,0 +1,87 @@
+@model List<ZE.Models.Founder>
+@{
+    ViewData["Title"] = "Founders";
+}
+
+<div class="admin-page-header">
+    <div>
+        <h1><i class="fa-solid fa-user-group"></i> Founders</h1>
+        <p>The “Two Minds, One Vision” section — photos, bios and accents.</p>
+    </div>
+    <a class="admin-btn admin-btn-gold" asp-area="Admin" asp-controller="Founders" asp-action="Create">
+        <i class="fa-solid fa-plus"></i> New founder
+    </a>
+</div>
+
+<section class="admin-panel glass-card">
+    @if (!Model.Any())
+    {
+        <div class="admin-empty-inline">No founders yet.</div>
+    }
+    else
+    {
+        <div class="admin-table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Founder</th>
+                        <th>Accent</th>
+                        <th>Order</th>
+                        <th>Status</th>
+                        <th style="text-align:right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var f in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(f.ImageUrl))
+                            {
+                                <img class="admin-thumb" src="@f.ImageUrl" alt="@f.Name" style="height:56px;width:56px" />
+                            }
+                        </td>
+                        <td>
+                            <strong>@f.Name</strong>
+                            <span class="sub">@f.Role — @f.JobTitle</span>
+                        </td>
+                        <td>
+                            <span class="admin-swatch" style="background:@f.AccentColor"></span>
+                            <span class="sub" style="display:inline;margin-left:6px">@f.AccentColor</span>
+                        </td>
+                        <td>@f.DisplayOrder</td>
+                        <td>
+                            @if (f.IsActive)
+                            {
+                                <span class="admin-pill admin-pill-green">Visible</span>
+                            }
+                            else
+                            {
+                                <span class="admin-pill admin-pill-muted">Hidden</span>
+                            }
+                        </td>
+                        <td class="admin-table-actions">
+                            <a class="admin-icon-btn gold" asp-area="Admin" asp-controller="Founders" asp-action="Edit" asp-route-id="@f.Id" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <form asp-area="Admin" asp-controller="Founders" asp-action="Toggle" asp-route-id="@f.Id" method="post">
+                                <button type="submit" class="admin-icon-btn" title="@(f.IsActive ? "Hide" : "Show")">
+                                    <i class="fa-solid @(f.IsActive ? "fa-eye-slash" : "fa-eye")"></i>
+                                </button>
+                            </form>
+                            <button type="button"
+                                    class="admin-icon-btn danger"
+                                    data-confirm-href="@Url.Action("Delete", "Founders", new { area = "Admin", id = f.Id })"
+                                    data-confirm-message="Delete founder “@f.Name”? Their photo will be removed too."
+                                    title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+<partial name="_ConfirmDelete" />

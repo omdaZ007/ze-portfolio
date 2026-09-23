@@ -1,0 +1,20 @@
+@{
+    var code = (int?)ViewData["StatusCode"] ?? 500;
+    var is404 = code == 404;
+    ViewData["Title"] = is404 ? "Page Not Found" : "Something Went Wrong";
+}
+<section class="error-page">
+    <div class="container error-inner">
+        <span class="error-code gold">@(is404 ? "404" : code)</span>
+        <h1>@(is404 ? "This page floated off the island" : "Something went wrong")</h1>
+        <p>
+            @(is404
+                ? "The page you're looking for doesn't exist or has moved. Let's get you back to solid ground."
+                : "We hit an unexpected error while processing your request. Our team has been noted — please try again in a moment.")
+        </p>
+        <div class="hero-actions">
+            <a class="btn btn-gold" href="/">Back Home <i class="fa-solid fa-arrow-right"></i></a>
+            <a class="btn btn-ghost" href="/projects">View Projects</a>
+        </div>
+    </div>
+</section>

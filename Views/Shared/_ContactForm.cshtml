@@ -1,0 +1,43 @@
+@model ContactFormViewModel
+@{
+    var returnUrl = ViewData["ReturnUrl"] as string ?? "/contact";
+}
+<form class="contact-form glass-card" asp-controller="Contact" asp-action="Send" method="post" id="contact-form">
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+    @if (TempData["Success"] is string success)
+    {
+        <div class="alert alert-success" role="status">@success</div>
+    }
+
+    <div class="form-row">
+        <div class="form-field">
+            <label asp-for="Name">Your name</label>
+            <input asp-for="Name" placeholder="John Doe" autocomplete="name" />
+            <span asp-validation-for="Name" class="field-validation"></span>
+        </div>
+        <div class="form-field">
+            <label asp-for="Email">Your email</label>
+            <input asp-for="Email" placeholder="john@company.com" autocomplete="email" />
+            <span asp-validation-for="Email" class="field-validation"></span>
+        </div>
+    </div>
+
+    <div class="form-field">
+        <label asp-for="ProjectType">Project type</label>
+        <select asp-for="ProjectType" asp-items="@(new SelectList(ProjectTypes.All))">
+            <option value="">Select a project type…</option>
+        </select>
+        <span asp-validation-for="ProjectType" class="field-validation"></span>
+    </div>
+
+    <div class="form-field">
+        <label asp-for="Message">Tell us about your project</label>
+        <textarea asp-for="Message" rows="5" placeholder="I'd love a modern website for…"></textarea>
+        <span asp-validation-for="Message" class="field-validation"></span>
+    </div>
+
+    <button type="submit" class="btn btn-gold btn-block">
+        Send Message <i class="fa-regular fa-paper-plane"></i>
+    </button>
+</form>

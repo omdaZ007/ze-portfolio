@@ -135,6 +135,45 @@
     </div>
 </section>
 
+<!-- ============================= SERVICES ============================= -->
+<section class="section services" id="services">
+    <div class="container">
+        <div class="section-head centered" data-reveal>
+            <span class="eyebrow framed">What We Do</span>
+            <h2>Services That <span class="gold">Ship</span></h2>
+            <p class="section-sub">From a first landing page to a full-stack product — designed, built and launched.</p>
+        </div>
+
+        @if (Model.Services.Count == 0)
+        {
+            <p class="empty-note">Services are managed from the admin dashboard.</p>
+        }
+        else
+        {
+            <div class="services-grid">
+                @foreach (var service in Model.Services)
+                {
+                    <div class="service-card" data-reveal>
+                        <span class="service-icon">
+                            @if (service.Icon.StartsWith("/"))
+                            {
+                                <img src="@service.Icon" alt="" aria-hidden="true" />
+                            }
+                            else
+                            {
+                                <i class="@service.Icon" aria-hidden="true"></i>
+                            }
+                        </span>
+                        <h3>@service.Title</h3>
+                        <p>@service.Description</p>
+                        <span class="service-line" aria-hidden="true"></span>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
 <!-- =========================== WEBSITE BRAIN ========================== -->
 <partial name="_WebsiteBrain" model="Model.Brain" />
 
@@ -219,6 +258,38 @@
 <!-- ============================ DIGITAL CITY =========================== -->
 <partial name="_DigitalCity" />
 
+<!-- ========================== DIGITAL HEARTBEAT ======================== -->
+<partial name="_DigitalHeartbeat" model="new DigitalHeartbeatViewModel()" />
+
+<!-- ============================= CONTACT ============================= -->
+<section class="section contact" id="contact">
+    <div class="container contact-grid">
+        <div class="contact-copy" data-reveal>
+            <span class="eyebrow">Get In Touch <span class="dash"></span></span>
+            <h2>Let's Build Something <span class="script gold">Great</span></h2>
+            <p>
+                Have a project in mind, or just want to say hello? Tell us a little about it —
+                we usually reply within one business day.
+            </p>
+
+            <ul class="contact-info">
+                <li><i class="fa-regular fa-envelope"></i> <a href="mailto:hello@ze.dev">hello@ze.dev</a></li>
+                <li><i class="fa-regular fa-clock"></i> Replies within 24 hours</li>
+                <li><i class="fa-solid fa-globe"></i> Working worldwide, remotely</li>
+            </ul>
+
+            <div class="hero-socials">
+                <a href="mailto:hello@ze.dev" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
+                <a href="https://wa.me/201226231940" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+
+        <div data-reveal>
+            <partial name="_ContactForm" model="Model.ContactForm" view-data='new ViewDataDictionary(ViewData) { { "ReturnUrl", "/#contact" } }' />
+        </div>
+    </div>
+</section>
+
 <!-- ============================ FOUNDERS ============================ -->
 <section class="section founders" id="founders">
     <div class="container">
@@ -278,80 +349,9 @@
             }
         </div>
 
-        <div class="founders-banner">
+        <div class="founders-banner" data-reveal>
             <img src="~/images/ze-nav-logo-3d.png" alt="" aria-hidden="true" />
             <span>Two Founders <span class="diamond">◆</span> One Journey</span>
-        </div>
-    </div>
-</section>
-
-<!-- ============================= SERVICES ============================= -->
-<section class="section services" id="services">
-    <div class="container">
-        <div class="section-head centered" data-reveal>
-            <span class="eyebrow framed">What We Do</span>
-            <h2>Services That <span class="gold">Ship</span></h2>
-            <p class="section-sub">From a first landing page to a full-stack product — designed, built and launched.</p>
-        </div>
-
-        @if (Model.Services.Count == 0)
-        {
-            <p class="empty-note">Services are managed from the admin dashboard.</p>
-        }
-        else
-        {
-            <div class="services-grid">
-                @foreach (var service in Model.Services)
-                {
-                    <div class="service-card" data-reveal>
-                        <span class="service-icon">
-                            @if (service.Icon.StartsWith("/"))
-                            {
-                                <img src="@service.Icon" alt="" aria-hidden="true" />
-                            }
-                            else
-                            {
-                                <i class="@service.Icon" aria-hidden="true"></i>
-                            }
-                        </span>
-                        <h3>@service.Title</h3>
-                        <p>@service.Description</p>
-                        <span class="service-line" aria-hidden="true"></span>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-</section>
-
-<!-- ========================== DIGITAL HEARTBEAT ======================== -->
-<partial name="_DigitalHeartbeat" model="new DigitalHeartbeatViewModel()" />
-
-<!-- ============================= CONTACT ============================= -->
-<section class="section contact" id="contact">
-    <div class="container contact-grid">
-        <div class="contact-copy" data-reveal>
-            <span class="eyebrow">Get In Touch <span class="dash"></span></span>
-            <h2>Let's Build Something <span class="script gold">Great</span></h2>
-            <p>
-                Have a project in mind, or just want to say hello? Tell us a little about it —
-                we usually reply within one business day.
-            </p>
-
-            <ul class="contact-info">
-                <li><i class="fa-regular fa-envelope"></i> <a href="mailto:hello@ze.dev">hello@ze.dev</a></li>
-                <li><i class="fa-regular fa-clock"></i> Replies within 24 hours</li>
-                <li><i class="fa-solid fa-globe"></i> Working worldwide, remotely</li>
-            </ul>
-
-            <div class="hero-socials">
-                <a href="mailto:hello@ze.dev" aria-label="Email"><i class="fa-regular fa-envelope"></i></a>
-                <a href="https://wa.me/201226231940" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-            </div>
-        </div>
-
-        <div data-reveal>
-            <partial name="_ContactForm" model="Model.ContactForm" view-data='new ViewDataDictionary(ViewData) { { "ReturnUrl", "/#contact" } }' />
         </div>
     </div>
 </section>

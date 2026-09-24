@@ -136,7 +136,7 @@
     }
 
     /* ------------------------ Active nav link --------------------------- */
-    var sections = ['home', 'about', 'skills', 'projects', 'contact']
+    var sections = ['home', 'about', 'services', 'skills', 'projects', 'dna', 'contact', 'founders']
         .map(function (id) { return document.getElementById(id); })
         .filter(Boolean);
 

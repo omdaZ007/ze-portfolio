@@ -19,14 +19,18 @@ public class HomeController : Controller
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var featured = await _projects.GetFeaturedAsync(4, cancellationToken);
+        var latest = await _projects.GetLatestPublishedAsync(16, cancellationToken);
+        var skills = await _content.GetActiveSkillsAsync(cancellationToken);
 
         var viewModel = new HomeViewModel
         {
-            Skills = await _content.GetActiveSkillsAsync(cancellationToken),
+            Skills = skills,
             FeaturedProjects = featured,
             DnaProjects = featured.Select(ProjectDnaBuilder.Build)
                 .Where(p => p.Nodes.Count > 0)
                 .ToList(),
+            RadarProjects = latest.Select(ProjectRadarBuilder.Build).ToList(),
+            Brain = WebsiteBrainBuilder.Build(latest, skills),
             Founders = await _content.GetActiveFoundersAsync(cancellationToken),
             Services = await _content.GetActiveServicesAsync(cancellationToken),
             TotalPublishedProjects = await _content.CountPublishedProjectsAsync(cancellationToken)

@@ -1,0 +1,159 @@
+@* =========================================================================
+   ZE — BUILD MODE
+   Signature cinematic intro: IDEA → WIREFRAME → DESIGN → CODE → TEST → LAUNCH.
+   Plays once per session, fully skippable, disabled for reduced-motion / no-JS.
+   ========================================================================= *@
+<script>
+    (function () {
+        try {
+            if (sessionStorage.getItem('ze-build-mode')) {
+                document.documentElement.classList.add('bm-done');
+            } else {
+                document.documentElement.classList.add('bm-armed');
+            }
+        } catch (e) {
+            document.documentElement.classList.add('bm-armed');
+        }
+    })();
+</script>
+
+<div class="build-mode" data-build-mode>
+    <div class="bm-sky" aria-hidden="true"></div>
+
+    <!-- ============================ STAGE ============================ -->
+    <div class="bm-stage" aria-hidden="true">
+
+        <!-- 1 · IDEA — glowing point expands into a handwritten word -->
+        <div class="bm-phase bm-idea" data-phase="idea">
+            <span class="bm-idea-dot"></span>
+            <span class="bm-idea-word">IDEA</span>
+            <svg class="bm-idea-sketch" viewBox="0 0 320 44" fill="none">
+                <path class="bm-draw" pathLength="1" d="M16 28 C 70 14, 130 36, 186 22 S 268 12, 306 24" />
+                <path class="bm-draw bm-draw-2" pathLength="1" d="M26 35 C 96 25, 170 41, 246 30" />
+            </svg>
+        </div>
+
+        <!-- 2 · WIREFRAME — the idea becomes structure -->
+        <div class="bm-phase bm-wire" data-phase="wire">
+            <svg viewBox="0 0 480 310" fill="none">
+                <rect class="bm-draw" pathLength="1" x="20" y="18" width="440" height="34" rx="4" />
+                <rect class="bm-draw" pathLength="1" x="34" y="30" width="46" height="10" rx="5" />
+                <rect class="bm-draw" pathLength="1" x="330" y="30" width="34" height="10" rx="5" />
+                <rect class="bm-draw" pathLength="1" x="376" y="30" width="34" height="10" rx="5" />
+                <rect class="bm-draw" pathLength="1" x="422" y="27" width="26" height="16" rx="8" />
+                <rect class="bm-draw bm-draw-hero" pathLength="1" x="20" y="64" width="440" height="112" rx="6" />
+                <rect class="bm-draw" pathLength="1" x="44" y="92" width="180" height="16" rx="8" />
+                <rect class="bm-draw" pathLength="1" x="44" y="118" width="128" height="10" rx="5" />
+                <rect class="bm-draw" pathLength="1" x="44" y="140" width="70" height="20" rx="10" />
+                <rect class="bm-draw" pathLength="1" x="286" y="84" width="150" height="74" rx="6" />
+                <rect class="bm-draw" pathLength="1" x="20" y="190" width="136" height="82" rx="6" />
+                <rect class="bm-draw" pathLength="1" x="172" y="190" width="136" height="82" rx="6" />
+                <rect class="bm-draw" pathLength="1" x="324" y="190" width="136" height="82" rx="6" />
+                <rect class="bm-draw" pathLength="1" x="36" y="206" width="64" height="8" rx="4" />
+                <rect class="bm-draw" pathLength="1" x="36" y="222" width="100" height="6" rx="3" />
+                <rect class="bm-draw" pathLength="1" x="188" y="206" width="64" height="8" rx="4" />
+                <rect class="bm-draw" pathLength="1" x="188" y="222" width="100" height="6" rx="3" />
+                <rect class="bm-draw" pathLength="1" x="340" y="206" width="64" height="8" rx="4" />
+                <rect class="bm-draw" pathLength="1" x="340" y="222" width="100" height="6" rx="3" />
+                <rect class="bm-draw" pathLength="1" x="20" y="286" width="440" height="8" rx="4" />
+            </svg>
+        </div>
+
+        <!-- 3 · DESIGN — wireframe becomes UI components -->
+        <div class="bm-phase bm-design" data-phase="design">
+            <div class="bm-d-frame">
+                <div class="bm-d-header">
+                    <span class="bm-d-logo"></span>
+                    <span class="bm-d-link"></span>
+                    <span class="bm-d-link"></span>
+                    <span class="bm-d-link"></span>
+                    <span class="bm-d-cta"></span>
+                </div>
+                <div class="bm-d-hero">
+                    <span class="bm-d-title"></span>
+                    <span class="bm-d-sub"></span>
+                    <span class="bm-d-btn"></span>
+                    <span class="bm-d-art"><i></i><i></i><i></i></span>
+                </div>
+                <div class="bm-d-cards">
+                    <span class="bm-d-card"><i class="ic"></i><i class="ln w70"></i><i class="ln w90"></i></span>
+                    <span class="bm-d-card is-blue"><i class="ic"></i><i class="ln w70"></i><i class="ln w90"></i></span>
+                    <span class="bm-d-card"><i class="ic"></i><i class="ln w70"></i><i class="ln w90"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4 · CODE — UI components become code fragments -->
+        <div class="bm-phase bm-code" data-phase="code">
+            <div class="bm-code-card">
+                <span class="bm-code-head"><i></i><i></i><i></i><em>App.tsx</em></span>
+                <div class="bm-code-body">
+                    <span class="bm-line"><span class="tk-p">&lt;</span><span class="tk-tag">Header</span><span class="tk-p"> /&gt;</span></span>
+                    <span class="bm-line"><span class="tk-p">&lt;</span><span class="tk-tag">Hero</span><span class="tk-attr"> title</span><span class="tk-p">=</span><span class="tk-str">"ZE"</span><span class="tk-p"> /&gt;</span></span>
+                    <span class="bm-line"><span class="tk-p">&lt;</span><span class="tk-tag">Card</span><span class="tk-attr"> project</span><span class="tk-p">=</span><span class="tk-str">"orbit"</span><span class="tk-p"> /&gt;</span></span>
+                    <span class="bm-line"><span class="tk-p">&lt;</span><span class="tk-tag">Button</span><span class="tk-p">&gt;</span><span class="tk-txt">Launch</span><span class="tk-p">&lt;/</span><span class="tk-tag">Button</span><span class="tk-p">&gt;</span></span>
+                    <span class="bm-line"><span class="tk-p">&lt;</span><span class="tk-tag">Footer</span><span class="tk-p"> /&gt;</span></span>
+                    <span class="bm-caret" data-bm-caret></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5 · TEST — fragments travel glowing paths into a verified build -->
+        <div class="bm-phase bm-test" data-phase="test">
+            <svg class="bm-test-tracks" viewBox="0 0 480 310" fill="none">
+                <path class="bm-draw bm-track" pathLength="1" d="M30 250 C 130 250, 110 70, 240 70 S 380 210, 450 60" />
+                <path class="bm-draw bm-track bm-track-2" pathLength="1" d="M30 155 C 150 155, 190 235, 310 165 S 420 95, 450 140" />
+                <path class="bm-draw bm-track bm-track-3" pathLength="1" d="M30 60 C 140 60, 180 130, 300 250 S 420 260, 450 230" />
+            </svg>
+            <span class="bm-frag" data-track="0">&lt;Header /&gt;</span>
+            <span class="bm-frag" data-track="1">&lt;Card /&gt;</span>
+            <span class="bm-frag" data-track="2">&lt;Button /&gt;</span>
+            <div class="bm-checks">
+                <span class="bm-check"><i class="fa-solid fa-check"></i> Structure</span>
+                <span class="bm-check"><i class="fa-solid fa-check"></i> Responsive</span>
+                <span class="bm-check"><i class="fa-solid fa-check"></i> Fast</span>
+            </div>
+        </div>
+
+        <!-- 6 · LAUNCH — the verified build becomes a finished website -->
+        <div class="bm-phase bm-launch" data-phase="launch">
+            <div class="bm-browser">
+                <span class="bm-browser-bar"><i></i><i></i><i></i><em>ze.dev</em></span>
+                <div class="bm-browser-view">
+                    <span class="bm-mini-nav"><b></b><i></i><i></i><i></i></span>
+                    <span class="bm-mini-hero">
+                        <b class="bm-mini-title">WE BUILD <span>IDEAS.</span></b>
+                        <i class="bm-mini-sub"></i>
+                        <i class="bm-mini-cta"></i>
+                    </span>
+                    <span class="bm-mini-cards"><i></i><i></i><i></i></span>
+                </div>
+                <span class="bm-browser-sheen"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================ FINAL ============================ -->
+    <div class="bm-final" aria-hidden="true">
+        <p class="bm-slogan">WE BUILD IDEAS.</p>
+        <p class="bm-welcome">Welcome to <span class="gold">ZE</span>.</p>
+    </div>
+
+    <!-- ============================= HUD ============================= -->
+    <div class="bm-hud">
+        <ol class="bm-steps">
+            <li data-step="idea">IDEA</li>
+            <li data-step="wire">WIREFRAME</li>
+            <li data-step="design">DESIGN</li>
+            <li data-step="code">CODE</li>
+            <li data-step="test">TEST</li>
+            <li data-step="launch">LAUNCH</li>
+        </ol>
+        <div class="bm-track"><i class="bm-fill"></i></div>
+        <span class="bm-status"><i class="fa-solid fa-terminal"></i> building experience…</span>
+    </div>
+
+    <button class="bm-skip" type="button" data-bm-skip>
+        Skip intro <i class="fa-solid fa-forward"></i>
+    </button>
+</div>

@@ -1,0 +1,150 @@
+/* =========================================================================
+   ZE — DIGITAL HEARTBEAT
+   A particle-line pulse: technology + heartbeat.
+   Visual representation only — no measured metrics are claimed.
+   ========================================================================= */
+
+.heartbeat {
+    position: relative;
+    overflow: hidden;
+}
+.heartbeat::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(700px 320px at 50% 58%, rgba(245, 185, 66, 0.06), transparent 65%),
+        radial-gradient(800px 380px at 82% 30%, rgba(22, 139, 255, 0.07), transparent 65%);
+    pointer-events: none;
+}
+
+.hb-project-note {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+.hb-project-note strong { color: var(--gold-light); font-weight: 600; }
+
+/* -------------------------------- stage ---------------------------------- */
+.hb-stage {
+    position: relative;
+    max-width: 980px;
+    margin: clamp(16px, 3vw, 34px) auto 0;
+    padding: 54px 0 6px;
+}
+.hb-svg {
+    display: block;
+    width: 100%;
+    height: clamp(140px, 20vw, 210px);
+    overflow: visible;
+}
+.hb-glow {
+    fill: none;
+    stroke: rgba(245, 185, 66, 0.2);
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.hb-line {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-dasharray: 0.5 8.5;
+}
+.hb-head-path {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0);
+    stroke-width: 1;
+}
+.hb-head {
+    fill: var(--gold-light);
+    filter: drop-shadow(0 0 9px rgba(245, 185, 66, 0.95));
+}
+
+/* centre scan marker */
+.hb-baseline {
+    position: absolute;
+    top: 54px;
+    bottom: 76px;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(56, 167, 255, 0.55), transparent);
+    pointer-events: none;
+}
+
+/* ------------------------------- pulse word ------------------------------ */
+.hb-word {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-script);
+    font-size: clamp(1.3rem, 3.2vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    text-shadow: 0 0 34px rgba(245, 185, 66, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+.hb-word.is-flash { animation: hbWord 1s var(--ease-cine); }
+@keyframes hbWord {
+    0% { opacity: 0; transform: translateX(-50%) translateY(14px) scale(0.94); }
+    22% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    70% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.98); }
+}
+
+/* ------------------------------- metrics --------------------------------- */
+.hb-metrics {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: clamp(16px, 3vw, 26px) 0 0;
+    padding: 0;
+}
+.hb-metrics li {
+    font-size: clamp(0.66rem, 1.4vw, 0.78rem);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 9px 17px;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 999px;
+    background: rgba(7, 17, 31, 0.65);
+    transition: color 0.4s var(--ease-cine), background 0.4s var(--ease-cine),
+        border-color 0.4s var(--ease-cine), box-shadow 0.4s var(--ease-cine),
+        transform 0.4s var(--ease-cine);
+}
+.hb-metrics li.is-hot {
+    color: #14100A;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-color: transparent;
+    box-shadow: 0 9px 26px rgba(245, 185, 66, 0.38);
+    transform: translateY(-3px);
+}
+
+.hb-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: rgba(154, 168, 188, 0.75);
+    margin-top: 17px;
+}
+
+/* --------------------------- RESPONSIVE ---------------------------------- */
+@media (max-width: 640px) {
+    .hb-stage { padding-top: 48px; }
+    .hb-baseline { top: 48px; bottom: 100px; }
+    .hb-metrics { gap: 8px; }
+    .hb-metrics li { padding: 7px 12px; letter-spacing: 0.1em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hb-word.is-flash { animation: none; opacity: 1; }
+    .hb-head { display: none; }
+}

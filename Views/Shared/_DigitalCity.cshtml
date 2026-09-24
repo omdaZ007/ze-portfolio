@@ -1,0 +1,115 @@
+@* =========================================================================
+   ZE — DIGITAL CITY
+   The site as a miniature architectural world: districts are buildings,
+   buildings are navigation. Scroll drives a smooth camera pan (desktop);
+   mobile gets a simplified vertical city map.
+   ========================================================================= *@
+@{
+    var buildings = new[]
+    {
+        new { Key = "tower",    Name = "ZE Tower",          Tag = "Home",     Href = "#home",     Bx = 3,  Bw = 9,  Bh = 78 },
+        new { Key = "studio",   Name = "Creative Studio",   Tag = "Services", Href = "#services", Bx = 18, Bw = 12, Bh = 52 },
+        new { Key = "district", Name = "Project District",  Tag = "Projects", Href = "#projects", Bx = 35, Bw = 15, Bh = 66 },
+        new { Key = "founders", Name = "Founders House",    Tag = "Founders", Href = "#founders", Bx = 56, Bw = 11, Bh = 46 },
+        new { Key = "lab",      Name = "Lab",               Tag = "Skills",   Href = "#skills",   Bx = 71, Bw = 9,  Bh = 60 },
+        new { Key = "station",  Name = "Contact Station",   Tag = "Contact",  Href = "#contact",  Bx = 85, Bw = 12, Bh = 50 },
+    };
+}
+<section class="section city" id="city" data-city>
+    <div class="city-viewport" data-city-viewport>
+        <div class="city-inner">
+            <header class="city-head" data-reveal>
+                <span class="eyebrow framed">Where Everything Lives</span>
+                <h2>Welcome To The <span class="gold">ZE Digital City</span></h2>
+                <p class="section-sub">Scroll to travel between districts — or click a building to jump straight there.</p>
+            </header>
+
+            <div class="city-world" data-city-world aria-hidden="false">
+                <!-- far skyline -->
+                <div class="city-layer city-far" data-city-far aria-hidden="true">
+                    <svg viewBox="0 0 1600 400" preserveAspectRatio="none">
+                        <path d="M0 400 V268 H72 V206 H124 V252 H192 V164 H252 V242 H322 V212 H392 V282 H462 V184 H522 V252 H602 V204 H682 V272 H762 V154 H832 V232 H902 V262 H982 V194 H1052 V252 H1132 V214 H1212 V272 H1292 V174 H1362 V244 H1442 V214 H1522 V264 H1600 V400 Z" />
+                    </svg>
+                </div>
+
+                <!-- mid: the interactive district -->
+                <div class="city-layer city-mid" data-city-mid>
+                    @foreach (var b in buildings)
+                    {
+                        <a class="city-building" href="@b.Href" data-city-building data-name="@b.Name"
+                           style="--bx: @b.Bx%; --bw: @b.Bw%; --bh: @b.Bh%;">
+                            <span class="city-sign">
+                                <em>@b.Name</em>
+                                <i>@b.Tag</i>
+                            </span>
+                            <span class="city-roof" aria-hidden="true"></span>
+                            <span class="city-face" aria-hidden="true">
+                                @for (var w = 0; w < 14; w++)
+                                {
+                                    <i class="city-win" style="--i: @w;"></i>
+                                }
+                            </span>
+                            <span class="city-beam" aria-hidden="true"></span>
+                        </a>
+                    }
+                </div>
+
+                <!-- near: fog + street glow -->
+                <div class="city-layer city-near" data-city-near aria-hidden="true">
+                    <span class="city-fog f1"></span>
+                    <span class="city-fog f2"></span>
+                    <span class="city-fog f3"></span>
+                </div>
+            </div>
+
+            <div class="city-ground" aria-hidden="true"></div>
+
+            <div class="city-hud" aria-hidden="true">
+                <span class="city-hud-dot"></span>
+                <span class="city-hud-label" data-city-hud>ZE Tower</span>
+                <span class="city-hud-hint"><i class="fa-solid fa-computer-mouse"></i> scroll to travel</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- mobile: simplified vertical city map -->
+    <div class="container city-map">
+        <header class="section-head centered" data-reveal>
+            <span class="eyebrow framed">City Map</span>
+            <h2>The <span class="gold">ZE Digital City</span></h2>
+            <p class="section-sub">Pick a district — we'll take you there.</p>
+        </header>
+
+        <div class="city-map-skyline" aria-hidden="true">
+            <svg viewBox="0 0 600 140" preserveAspectRatio="none">
+                <path d="M0 140 V96 H48 V60 H92 V88 H140 V34 H196 V82 H244 V64 H300 V100 H350 V48 H404 V86 H452 V66 H508 V94 H556 V72 H600 V140 Z" />
+            </svg>
+        </div>
+
+        <ol class="city-map-list">
+            @foreach (var b in buildings)
+            {
+                <li data-reveal>
+                    <a class="city-map-item glass-card" href="@b.Href">
+                        <span class="city-map-glyph" aria-hidden="true">
+                            <svg viewBox="0 0 44 44">
+                                <rect class="g1" x="5" y="18" width="10" height="22" rx="1" />
+                                <rect class="g2" x="17" y="6" width="12" height="34" rx="1" />
+                                <rect class="g3" x="31" y="22" width="8" height="18" rx="1" />
+                                <rect class="g-w" x="20" y="11" width="3" height="3" />
+                                <rect class="g-w" x="25" y="11" width="3" height="3" />
+                                <rect class="g-w" x="20" y="18" width="3" height="3" />
+                                <rect class="g-w" x="8" y="23" width="3" height="3" />
+                            </svg>
+                        </span>
+                        <span class="city-map-text">
+                            <em>@b.Name</em>
+                            <i>@b.Tag</i>
+                        </span>
+                        <i class="fa-solid fa-arrow-right city-map-go" aria-hidden="true"></i>
+                    </a>
+                </li>
+            }
+        </ol>
+    </div>
+</section>

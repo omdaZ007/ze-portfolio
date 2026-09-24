@@ -1,0 +1,364 @@
+/* =========================================================================
+   ZE — DIGITAL CITY
+   Premium architectural environment · scroll-driven camera pan (desktop)
+   · simplified vertical city map (mobile)
+   ========================================================================= */
+
+.city {
+    position: relative;
+    padding: 0;
+    min-height: 340vh;
+    background:
+        radial-gradient(1000px 480px at 20% 0%, rgba(22, 139, 255, 0.07), transparent 60%),
+        radial-gradient(900px 460px at 85% 100%, rgba(245, 185, 66, 0.05), transparent 60%);
+}
+
+/* ------------------------------ viewport -------------------------------- */
+.city-viewport {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+.city-inner {
+    position: relative;
+    height: 100%;
+}
+
+.city-head {
+    position: absolute;
+    top: calc(var(--nav-height) + 16px);
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 0 var(--gutter);
+    z-index: 6;
+    pointer-events: none;
+}
+.city-head h2 {
+    font-size: clamp(1.7rem, 3.6vw, 2.7rem);
+    margin-bottom: 0.4em;
+}
+.city-head .section-sub {
+    font-size: clamp(0.86rem, 1.6vw, 1rem);
+    max-width: 560px;
+    margin: 0 auto;
+}
+.city-head .eyebrow { justify-content: center; }
+
+/* ------------------------------- world ---------------------------------- */
+.city-world {
+    position: absolute;
+    inset: 0;
+    width: 300%;
+    will-change: transform;
+}
+.city-layer { position: absolute; inset: 0; }
+
+.city-far { z-index: 1; }
+.city-far svg {
+    position: absolute;
+    left: 0;
+    bottom: 13%;
+    width: 100%;
+    height: 52%;
+    will-change: transform;
+}
+.city-far path { fill: #0A1628; }
+
+.city-mid { z-index: 2; will-change: transform; }
+
+.city-near { z-index: 4; pointer-events: none; }
+
+.city-ground {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 15%;
+    background: linear-gradient(180deg, rgba(6, 13, 26, 0), #060D1A 42%);
+    z-index: 3;
+    pointer-events: none;
+}
+.city-ground::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 167, 255, 0.45), rgba(245, 185, 66, 0.35), transparent);
+}
+
+/* ------------------------------ buildings -------------------------------- */
+.city-building {
+    position: absolute;
+    left: var(--bx);
+    bottom: 14.5%;
+    width: var(--bw);
+    height: var(--bh);
+    display: block;
+    text-decoration: none;
+    z-index: 2;
+    transition: filter 0.45s var(--ease-cine);
+}
+.city-building:hover,
+.city-building.is-current { z-index: 5; }
+
+.city-roof {
+    position: absolute;
+    top: -9px;
+    left: 6%;
+    right: 6%;
+    height: 9px;
+    background: #16233C;
+    border-radius: 3px 3px 0 0;
+    border-top: 1px solid rgba(56, 167, 255, 0.35);
+}
+.city-face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13px, 1fr));
+    grid-auto-rows: 9px;
+    align-content: start;
+    gap: 7px;
+    padding: 13px 9px;
+    background: linear-gradient(180deg, #101E36, #0A1424);
+    border: 1px solid rgba(56, 167, 255, 0.24);
+    border-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    box-shadow: inset 0 0 44px rgba(0, 0, 0, 0.55), 0 24px 44px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.45s var(--ease-cine);
+}
+.city-win {
+    height: 9px;
+    border-radius: 2px;
+    background: rgba(245, 185, 66, 0.8);
+    box-shadow: 0 0 6px rgba(245, 185, 66, 0.4);
+    opacity: 0.4;
+    animation: winTwinkle 5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.5s);
+}
+.city-win:nth-child(3n) {
+    background: rgba(56, 167, 255, 0.75);
+    box-shadow: 0 0 6px rgba(56, 167, 255, 0.4);
+}
+.city-win:nth-child(5n) { opacity: 0.2; animation-duration: 6.5s; }
+@keyframes winTwinkle {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 0.9; }
+}
+.city-building:hover .city-face,
+.city-building.is-current .city-face {
+    border-color: rgba(245, 185, 66, 0.5);
+}
+
+/* holographic sign */
+.city-sign {
+    position: absolute;
+    top: -70px;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: max-content;
+    padding: 9px 17px;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    border-radius: 11px;
+    background: rgba(7, 17, 31, 0.85);
+    border: 1px solid rgba(56, 167, 255, 0.42);
+    backdrop-filter: blur(9px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    transition: transform 0.45s var(--ease-cine), border-color 0.45s var(--ease-cine),
+        box-shadow 0.45s var(--ease-cine);
+    z-index: 3;
+}
+.city-sign::after {
+    content: "";
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    width: 1px;
+    height: 18px;
+    background: linear-gradient(180deg, rgba(56, 167, 255, 0.65), transparent);
+}
+.city-sign em {
+    font-style: normal;
+    font-weight: 700;
+    font-size: clamp(0.66rem, 1.1vw, 0.84rem);
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    transition: color 0.4s;
+}
+.city-sign i {
+    font-style: normal;
+    font-size: clamp(0.54rem, 0.9vw, 0.64rem);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+}
+.city-building:hover .city-sign,
+.city-building.is-current .city-sign {
+    transform: translateX(-50%) translateY(-7px);
+    border-color: rgba(245, 185, 66, 0.65);
+    box-shadow: 0 0 30px rgba(245, 185, 66, 0.3), 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+.city-building.is-current .city-sign em { color: var(--gold-light); }
+
+.city-beam {
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    width: 2px;
+    height: 46px;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(245, 185, 66, 0), rgba(245, 185, 66, 0.7));
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-cine);
+    z-index: 1;
+}
+.city-building.is-current .city-beam {
+    opacity: 1;
+    animation: beamPulse 2.6s ease-in-out infinite;
+}
+@keyframes beamPulse { 50% { opacity: 0.45; } }
+
+/* -------------------------------- fog ----------------------------------- */
+.city-fog {
+    position: absolute;
+    bottom: -8%;
+    width: 46%;
+    height: 36%;
+    background: radial-gradient(ellipse at center, rgba(22, 139, 255, 0.11), transparent 66%);
+    animation: drift 17s ease-in-out infinite alternate;
+}
+.city-fog.f1 { left: 2%; }
+.city-fog.f2 {
+    left: 38%;
+    background: radial-gradient(ellipse at center, rgba(245, 185, 66, 0.08), transparent 66%);
+    animation-duration: 21s;
+}
+.city-fog.f3 { left: 72%; animation-duration: 19s; }
+
+/* -------------------------------- HUD ----------------------------------- */
+.city-hud {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 20px;
+    border-radius: 999px;
+    background: rgba(7, 17, 31, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(11px);
+    z-index: 6;
+    white-space: nowrap;
+}
+.city-hud-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(245, 185, 66, 0.85);
+    animation: hudBlink 1.7s ease-in-out infinite;
+}
+@keyframes hudBlink { 50% { opacity: 0.35; } }
+.city-hud-label {
+    font-size: clamp(0.68rem, 1.4vw, 0.8rem);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    transition: opacity 0.3s;
+}
+.city-hud-hint {
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    padding-left: 13px;
+}
+.city-hud-hint i { color: var(--blue-light); margin-right: 5px; }
+
+/* --------------------------- mobile city map ----------------------------- */
+.city-map { display: none; }
+
+@media (max-width: 860px) {
+    .city {
+        min-height: 0;
+        padding: clamp(70px, 9vw, 130px) 0;
+    }
+    .city-viewport { display: none; }
+    .city-map { display: block; }
+
+    .city-map-skyline {
+        height: clamp(80px, 22vw, 130px);
+        margin-bottom: 4px;
+        -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent);
+        mask-image: linear-gradient(180deg, #000 60%, transparent);
+    }
+    .city-map-skyline svg { width: 100%; height: 100%; }
+    .city-map-skyline path { fill: #0D1B31; }
+
+    .city-map-list {
+        list-style: none;
+        margin: clamp(14px, 3vw, 24px) 0 0;
+        padding: 0;
+        display: grid;
+        gap: 12px;
+    }
+    .city-map-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 14px 16px;
+        border-radius: 15px;
+        transition: transform 0.35s var(--ease-cine), border-color 0.35s var(--ease-cine);
+    }
+    .city-map-item:hover {
+        transform: translateY(-3px);
+        border-color: rgba(245, 185, 66, 0.5);
+    }
+    .city-map-glyph { width: 44px; height: 44px; flex-shrink: 0; }
+    .city-map-glyph svg { width: 100%; height: 100%; }
+    .city-map-glyph .g1, .city-map-glyph .g2, .city-map-glyph .g3 {
+        fill: #152441;
+        stroke: rgba(56, 167, 255, 0.45);
+        stroke-width: 1;
+    }
+    .city-map-glyph .g2 { stroke: rgba(245, 185, 66, 0.55); }
+    .city-map-glyph .g-w { fill: var(--gold); stroke: none; opacity: 0.85; }
+    .city-map-text { display: grid; gap: 3px; flex: 1; min-width: 0; }
+    .city-map-text em {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--text-primary);
+    }
+    .city-map-text i {
+        font-style: normal;
+        font-size: 0.66rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold-light);
+    }
+    .city-map-go {
+        color: var(--text-muted);
+        transition: transform 0.3s var(--ease-cine), color 0.3s;
+    }
+    .city-map-item:hover .city-map-go {
+        transform: translateX(5px);
+        color: var(--gold);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .city-win { animation: none; opacity: 0.55; }
+    .city-fog { animation: none; }
+    .city-hud-dot { animation: none; }
+    .city-building.is-current .city-beam { animation: none; opacity: 0.8; }
+}

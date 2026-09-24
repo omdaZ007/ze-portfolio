@@ -1,0 +1,86 @@
+@model WebsiteBrainViewModel
+@* =========================================================================
+   ZE — WEBSITE BRAIN ("How It Thinks")
+   Abstract neural structure of glowing nodes + circuit lines.
+   A travelling signal activates each system and reveals its panel.
+   ========================================================================= *@
+<section class="section brain" id="brain" data-brain>
+    <div class="container">
+        <header class="section-head centered" data-reveal>
+            <span class="eyebrow framed">How It Thinks</span>
+            <h2>Every Website Has A <span class="gold">Brain</span></h2>
+            <p class="section-sub">We build the systems behind the experience.</p>
+        </header>
+
+        <div class="brain-stage" data-brain-stage data-reveal>
+            <svg class="brain-net" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g class="brain-links">
+                    <path d="M180 252 Q300 300 460 280" />
+                    <path d="M320 437 Q400 370 460 280" />
+                    <path d="M550 101 Q480 170 460 280" />
+                    <path d="M840 224 Q680 210 460 280" />
+                    <path d="M680 414 Q580 370 460 280" />
+                    <path d="M180 252 Q210 360 320 437" />
+                    <path d="M550 101 Q720 110 840 224" />
+                    <path d="M840 224 Q790 330 680 414" />
+                    <path d="M680 414 Q480 470 320 437" />
+                    <path d="M180 252 Q300 140 550 101" />
+                </g>
+
+                <g class="brain-micro">
+                    <circle cx="92" cy="146" r="3.5" />
+                    <circle cx="268" cy="128" r="3" />
+                    <circle cx="452" cy="52" r="3.5" />
+                    <circle cx="666" cy="66" r="3" />
+                    <circle cx="924" cy="148" r="3.5" />
+                    <circle cx="946" cy="366" r="3" />
+                    <circle cx="768" cy="524" r="3.5" />
+                    <circle cx="536" cy="530" r="3" />
+                    <circle cx="208" cy="524" r="3.5" />
+                    <circle cx="58" cy="352" r="3" />
+                    <circle cx="240" cy="330" r="2.5" />
+                    <circle cx="742" cy="300" r="2.5" />
+                </g>
+
+                <g class="brain-glyphs">
+                    <text x="86" y="128">&lt;/&gt;</text>
+                    <text x="916" y="132">{ }</text>
+                    <text x="676" y="50">200 OK</text>
+                    <text x="524" y="552">SELECT</text>
+                    <text x="196" y="546">auth()</text>
+                </g>
+
+                <path class="brain-circuit"
+                      d="M180 252 Q340 140 550 101 Q720 120 840 224 Q790 340 680 414 Q470 480 320 437 Q350 370 460 280 Q330 240 180 252"
+                      fill="none" data-brain-circuit />
+                <circle class="brain-signal-halo" r="11" data-brain-halo opacity="0" />
+                <circle class="brain-signal" r="4.5" data-brain-signal opacity="0" />
+            </svg>
+
+            <div class="brain-nodes">
+                @foreach (var node in Model.Nodes)
+                {
+                    <button class="brain-node" type="button" data-brain-node
+                            data-key="@node.Key" data-label="@node.Label" data-icon="@node.Icon"
+                            data-desc="@node.Description"
+                            data-techs="@string.Join(" • ", node.Technologies)"
+                            style="--x: @(node.X * 100)% ; --y: @(node.Y * 100)%;"
+                            aria-pressed="false">
+                        <span class="brain-node-ring" aria-hidden="true"></span>
+                        <span class="brain-node-core" aria-hidden="true"><i class="@node.Icon"></i></span>
+                        <span class="brain-node-label">@node.Label</span>
+                    </button>
+                }
+            </div>
+
+            <aside class="brain-panel glass-card" data-brain-panel aria-live="polite">
+                <span class="brain-panel-head">
+                    <i data-brain-panel-icon class="fa-solid fa-brain"></i>
+                    <strong data-brain-panel-label>SYSTEM</strong>
+                </span>
+                <p data-brain-panel-desc>Description</p>
+                <div class="brain-chips" data-brain-panel-chips></div>
+            </aside>
+        </div>
+    </div>
+</section>

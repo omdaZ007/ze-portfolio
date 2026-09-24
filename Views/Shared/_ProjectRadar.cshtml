@@ -1,0 +1,138 @@
+@model IReadOnlyList<ProjectRadarViewModel>
+@* =========================================================================
+   ZE — PROJECT RADAR
+   Database-driven projects orbit ZE as glowing satellite nodes.
+   Hover slows the orbit and opens a glass preview; click flies the node
+   to the centre and expands into a full project detail modal.
+   ========================================================================= *@
+<section class="section radar" id="radar" data-radar>
+    <div class="container">
+        <header class="section-head centered" data-reveal>
+            <span class="eyebrow framed">Project Radar</span>
+            <h2>Our Work, <span class="gold">In Orbit</span></h2>
+            <p class="section-sub">
+                Every product we've shipped — circling one central system.
+                Hover to lock on, click to open.
+            </p>
+        </header>
+
+        <div class="radar-stage" data-radar-stage data-reveal>
+            <svg class="radar-rings" viewBox="0 0 600 600" aria-hidden="true">
+                <circle cx="300" cy="300" r="112" />
+                <circle cx="300" cy="300" r="186" />
+                <circle cx="300" cy="300" r="264" class="ring-dash" />
+                <line x1="300" y1="20" x2="300" y2="580" class="ring-cross" />
+                <line x1="20" y1="300" x2="580" y2="300" class="ring-cross" />
+                <g class="radar-sweep">
+                    <path d="M300 300 L300 36 A264 264 0 0 1 486 114 Z" />
+                </g>
+            </svg>
+
+            <div class="radar-center" aria-hidden="true">
+                <span class="radar-center-core"></span>
+                <span class="radar-center-mark">ZE</span>
+            </div>
+
+            <div class="radar-orbits" data-radar-orbits>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    var p = Model[i];
+                    <button class="radar-node" type="button" data-radar-node data-index="@i"
+                            data-title="@p.Title"
+                            data-desc="@p.ShortDescription"
+                            data-techs="@string.Join(" • ", p.Technologies)"
+                            data-href="/projects/@p.Slug"
+                            data-gh="@p.GithubUrl"
+                            data-live="@p.LiveUrl"
+                            data-img="@(string.IsNullOrEmpty(p.ImageUrl) ? "" : p.ImageUrl)"
+                            style="--ring: @(i % 2);"
+                            aria-label="Open project @p.Title">
+                        <span class="radar-dot" aria-hidden="true"></span>
+                        <span class="radar-name">@p.Title</span>
+                    </button>
+                }
+            </div>
+
+            <div class="radar-preview glass-card" data-radar-preview hidden>
+                <div class="radar-preview-media">
+                    <img data-rp-img alt="" />
+                </div>
+                <div class="radar-preview-body">
+                    <h3 data-rp-title></h3>
+                    <p data-rp-desc></p>
+                    <div class="brain-chips" data-rp-techs></div>
+                    <div class="radar-actions">
+                        <a class="btn btn-gold btn-sm" data-rp-href href="#">View Project</a>
+                        <a class="btn btn-ghost btn-sm" data-rp-gh href="#" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- full project detail modal (node exits orbit → centre → expands) -->
+        <div class="radar-modal" data-radar-modal hidden>
+            <div class="radar-modal-backdrop" data-radar-close></div>
+            <div class="radar-modal-card glass-card" role="dialog" aria-modal="true" aria-labelledby="radar-modal-title">
+                <button class="radar-modal-x" type="button" data-radar-close aria-label="Close project view">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="radar-modal-media">
+                    <img data-rm-img alt="" />
+                </div>
+                <div class="radar-modal-body">
+                    <h3 id="radar-modal-title" data-rm-title></h3>
+                    <p data-rm-desc></p>
+                    <div class="brain-chips" data-rm-techs></div>
+                    <div class="radar-actions">
+                        <a class="btn btn-gold" data-rm-href href="#">
+                            View Project <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a class="btn btn-ghost" data-rm-live href="#" target="_blank" rel="noopener">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+                        </a>
+                        <a class="btn btn-ghost" data-rm-gh href="#" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mobile: orbit becomes a vertical project timeline -->
+        <div class="radar-list">
+            @foreach (var p in Model)
+            {
+                <article class="radar-item" data-reveal>
+                    <span class="radar-item-dot" aria-hidden="true"></span>
+                    <div class="radar-item-card glass-card">
+                        <div class="radar-item-media">
+                            <img src="@(string.IsNullOrEmpty(p.ImageUrl) ? Url.Content("~/images/browser-window.png") : p.ImageUrl)"
+                                 alt="@p.Title — preview" loading="lazy" />
+                        </div>
+                        <div class="radar-item-body">
+                            <h3>@p.Title</h3>
+                            <p>@p.ShortDescription</p>
+                            <div class="brain-chips">
+                                @foreach (var t in p.Technologies.Take(5))
+                                {
+                                    <span class="chip">@t</span>
+                                }
+                            </div>
+                            <div class="radar-actions">
+                                <a class="btn btn-gold btn-sm" href="/projects/@p.Slug">View Project</a>
+                                @if (!string.IsNullOrEmpty(p.GithubUrl))
+                                {
+                                    <a class="btn btn-ghost btn-sm" href="@p.GithubUrl" target="_blank" rel="noopener">
+                                        <i class="fa-brands fa-github"></i> GitHub
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    </div>
+</section>

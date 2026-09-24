@@ -1,0 +1,46 @@
+@model DigitalHeartbeatViewModel
+@* =========================================================================
+   ZE — DIGITAL HEARTBEAT
+   A particle-line pulse: a visual signature of "alive" technology.
+   Visual representation only — no measured metrics are claimed.
+   ========================================================================= *@
+<section class="section heartbeat" id="heartbeat" data-heartbeat
+         data-seed="@Model.Seed"
+         data-words="@string.Join("|", Model.PulseWords)">
+    <div class="container">
+        <header class="section-head centered" data-reveal>
+            <span class="eyebrow framed">Built To Feel Alive</span>
+            <h2>Every Project Has A <span class="gold">Heartbeat</span></h2>
+            <p class="section-sub">Fast. Responsive. Alive.</p>
+            @if (!string.IsNullOrEmpty(Model.ProjectTitle))
+            {
+                <p class="hb-project-note">
+                    The rhythm of <strong>@Model.ProjectTitle</strong> — a visual signature for this build.
+                </p>
+            }
+        </header>
+
+        <div class="hb-stage" data-reveal>
+            <svg class="hb-svg" viewBox="0 0 900 220" preserveAspectRatio="none" aria-hidden="true">
+                <path class="hb-glow" data-hb-glow d="" />
+                <path class="hb-line" data-hb-line d="" />
+                <path class="hb-head-path" data-hb-headpath d="" />
+                <circle class="hb-head" data-hb-head r="5" opacity="0" />
+            </svg>
+
+            <span class="hb-baseline" aria-hidden="true"></span>
+
+            <div class="hb-word" data-hb-word aria-live="polite">Performance</div>
+
+            <ul class="hb-metrics">
+                <li data-hb-metric>Performance</li>
+                <li data-hb-metric>Speed</li>
+                <li data-hb-metric>Responsiveness</li>
+                <li data-hb-metric>Stability</li>
+                <li data-hb-metric>Features</li>
+            </ul>
+
+            <p class="hb-note">A visual signature of how ZE products feel — not a measured benchmark.</p>
+        </div>
+    </div>
+</section>

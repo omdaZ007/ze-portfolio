@@ -1,0 +1,337 @@
+/* =========================================================================
+   ZE — PROJECT RADAR
+   Orbiting satellite nodes around a gold ZE core · glass previews · modal
+   ========================================================================= */
+
+.radar { position: relative; }
+
+.radar-stage {
+    position: relative;
+    max-width: 660px;
+    margin: clamp(6px, 2vw, 22px) auto 0;
+    aspect-ratio: 1;
+}
+
+/* -------------------------------- rings --------------------------------- */
+.radar-rings {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+.radar-rings circle {
+    fill: none;
+    stroke: rgba(56, 167, 255, 0.2);
+    stroke-width: 1.3;
+}
+.radar-rings .ring-dash {
+    stroke: rgba(245, 185, 66, 0.26);
+    stroke-dasharray: 4 9;
+}
+.radar-rings .ring-cross {
+    stroke: rgba(56, 167, 255, 0.1);
+    stroke-width: 1;
+}
+.radar-sweep {
+    transform-origin: 300px 300px;
+    animation: radarSweep 7.5s linear infinite;
+}
+.radar-sweep path {
+    fill: rgba(22, 139, 255, 0.09);
+}
+@keyframes radarSweep { to { transform: rotate(360deg); } }
+
+/* ------------------------------- core ----------------------------------- */
+.radar-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(72px, 15%, 98px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    z-index: 4;
+    pointer-events: none;
+}
+.radar-center-core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 34% 30%, #FFD36A, rgba(245, 185, 66, 0.75) 48%, rgba(245, 185, 66, 0.2));
+    box-shadow:
+        0 0 36px rgba(245, 185, 66, 0.5),
+        0 0 90px rgba(245, 185, 66, 0.22);
+    animation: radarCore 4.2s ease-in-out infinite;
+}
+@keyframes radarCore {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.07); box-shadow: 0 0 48px rgba(245, 185, 66, 0.6), 0 0 110px rgba(245, 185, 66, 0.28); }
+}
+.radar-center-mark {
+    position: relative;
+    font-family: var(--font-script);
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
+    font-weight: 800;
+    color: #14100A;
+    line-height: 1;
+}
+
+/* ------------------------------- nodes ---------------------------------- */
+.radar-orbits {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+}
+.radar-node {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: grid;
+    justify-items: center;
+    gap: 7px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    will-change: transform;
+}
+.radar-dot {
+    width: clamp(36px, 7vw, 46px);
+    height: clamp(36px, 7vw, 46px);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, rgba(56, 167, 255, 0.5), rgba(10, 22, 40, 0.96) 72%);
+    border: 1.5px solid rgba(56, 167, 255, 0.7);
+    box-shadow: 0 0 18px rgba(22, 139, 255, 0.4);
+    transition: transform 0.4s var(--ease-cine), border-color 0.35s var(--ease-cine),
+        box-shadow 0.35s var(--ease-cine), background 0.35s var(--ease-cine);
+}
+.radar-dot::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    box-shadow: 0 0 10px rgba(56, 167, 255, 0.95);
+    transition: background 0.35s, box-shadow 0.35s;
+}
+.radar-name {
+    font-size: clamp(0.6rem, 1.3vw, 0.7rem);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    white-space: nowrap;
+    opacity: 0.75;
+    text-shadow: 0 2px 10px rgba(4, 7, 14, 0.95);
+    transition: color 0.35s var(--ease-cine), opacity 0.35s var(--ease-cine);
+}
+.radar-node:hover .radar-dot,
+.radar-node:focus-visible .radar-dot,
+.radar-node.is-hot .radar-dot {
+    transform: scale(1.32);
+    border-color: var(--gold);
+    box-shadow: 0 0 28px rgba(245, 185, 66, 0.55);
+}
+.radar-node:hover .radar-dot::after,
+.radar-node:focus-visible .radar-dot::after,
+.radar-node.is-hot .radar-dot::after {
+    background: var(--gold-light);
+    box-shadow: 0 0 12px rgba(255, 211, 106, 0.95);
+}
+.radar-node:hover .radar-name,
+.radar-node:focus-visible .radar-name,
+.radar-node.is-hot .radar-name {
+    color: var(--text-primary);
+    opacity: 1;
+}
+.radar-node:focus-visible { outline: none; }
+.radar-node.is-selected .radar-dot {
+    border-color: var(--gold);
+    background: radial-gradient(circle at 32% 30%, rgba(245, 185, 66, 0.55), rgba(20, 16, 10, 0.96) 72%);
+}
+.radar-node.is-flying { z-index: 10; }
+.radar-node.is-flying .radar-dot {
+    transform: scale(1.5);
+    border-color: var(--gold);
+    box-shadow: 0 0 40px rgba(245, 185, 66, 0.7);
+}
+
+/* ------------------------------ preview --------------------------------- */
+.radar-preview {
+    position: absolute;
+    right: -3%;
+    bottom: 2%;
+    width: min(330px, 76%);
+    padding: 14px;
+    z-index: 8;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(16px) scale(0.97);
+    transition: opacity 0.4s var(--ease-cine), transform 0.4s var(--ease-cine), visibility 0.4s;
+}
+.radar-preview.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+.radar-preview-media {
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: #0A1628;
+}
+.radar-preview-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.radar-preview-body h3 { font-size: 1.05rem; margin-bottom: 6px; }
+.radar-preview-body p {
+    font-size: 0.84rem;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.radar-preview .brain-chips { justify-content: flex-start; }
+.radar-preview .brain-chips .chip:nth-child(n + 4) { display: none; }
+
+.radar-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 13px;
+}
+
+/* ------------------------------- modal ---------------------------------- */
+.radar-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+.radar-modal[hidden] { display: none; }
+.radar-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(3, 7, 14, 0.8);
+    backdrop-filter: blur(7px);
+    animation: radarFade 0.3s ease;
+}
+.radar-modal-card {
+    position: relative;
+    width: min(700px, 100%);
+    max-height: 88vh;
+    overflow: auto;
+    padding: clamp(18px, 3vw, 26px);
+    display: grid;
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+    animation: radarModalIn 0.55s var(--ease-cine);
+}
+@media (min-width: 700px) {
+    .radar-modal-card { grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+}
+@keyframes radarFade { from { opacity: 0; } }
+@keyframes radarModalIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+}
+.radar-modal-x {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: border-color var(--transition), color var(--transition), transform var(--transition);
+    z-index: 2;
+}
+.radar-modal-x:hover {
+    border-color: rgba(245, 185, 66, 0.6);
+    color: var(--gold-light);
+    transform: rotate(90deg);
+}
+.radar-modal-media {
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 16 / 11;
+    background: #0A1628;
+}
+.radar-modal-media img { width: 100%; height: 100%; object-fit: cover; }
+.radar-modal-body h3 { font-size: clamp(1.3rem, 3vw, 1.7rem); margin-bottom: 8px; padding-right: 40px; }
+.radar-modal-body p { font-size: 0.95rem; line-height: 1.7; }
+.radar-modal-body .brain-chips { justify-content: flex-start; margin-top: 4px; }
+
+body.radar-open { overflow: hidden; }
+
+/* ---------------------- mobile: orbit → timeline ------------------------ */
+.radar-list { display: none; }
+
+@media (max-width: 768px) {
+    .radar-stage,
+    .radar-preview,
+    .radar-modal { display: none !important; }
+
+    .radar-list {
+        position: relative;
+        display: grid;
+        gap: 18px;
+        margin-top: clamp(10px, 3vw, 24px);
+        padding-left: 30px;
+    }
+    .radar-list::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 10px;
+        bottom: 10px;
+        width: 1.5px;
+        background: linear-gradient(180deg, transparent, rgba(56, 167, 255, 0.55) 12%, rgba(245, 185, 66, 0.55) 88%, transparent);
+    }
+    .radar-item { position: relative; }
+    .radar-item-dot {
+        position: absolute;
+        left: -30px;
+        top: 26px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--bg-primary);
+        border: 2.5px solid var(--gold);
+        box-shadow: 0 0 12px rgba(245, 185, 66, 0.5);
+        z-index: 1;
+    }
+    .radar-item-card {
+        overflow: hidden;
+        padding: 0;
+        transition: transform var(--transition), border-color var(--transition);
+    }
+    .radar-item-card:hover { transform: translateY(-4px); border-color: rgba(245, 185, 66, 0.4); }
+    .radar-item-media { aspect-ratio: 16 / 8.5; background: #0A1628; }
+    .radar-item-media img { width: 100%; height: 100%; object-fit: cover; }
+    .radar-item-body { padding: 16px 18px 18px; }
+    .radar-item-body h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .radar-item-body p { font-size: 0.87rem; margin-bottom: 11px; }
+    .radar-item-body .brain-chips { justify-content: flex-start; }
+    .radar-item-body .brain-chips .chip:nth-child(n + 5) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .radar-sweep { animation: none; opacity: 0.4; }
+    .radar-center-core { animation: none; }
+    .radar-preview, .radar-modal-card { transition: none; animation: none; }
+}

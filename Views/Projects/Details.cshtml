@@ -5,6 +5,10 @@
     ViewData["Description"] = project.ShortDescription;
 }
 
+@section Styles {
+    <link rel="stylesheet" href="~/css/digital-heartbeat.css" asp-append-version="true" />
+}
+
 <section class="page-hero project-hero">
     <div class="container">
         <nav class="breadcrumbs" aria-label="Breadcrumb">
@@ -113,3 +117,11 @@
         }
     </div>
 </section>
+
+<!-- ========================== DIGITAL HEARTBEAT ======================== -->
+<partial name="_DigitalHeartbeat"
+         model="new DigitalHeartbeatViewModel { Seed = project.Id * 37 + 11, ProjectTitle = project.Title, ProjectSlug = project.Slug }" />
+
+@section Scripts {
+    <script src="~/js/digital-heartbeat.js" asp-append-version="true"></script>
+}

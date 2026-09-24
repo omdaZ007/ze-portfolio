@@ -33,7 +33,7 @@
     --gutter: clamp(18px, 4vw, 32px);
 
     --font-sans: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
-    --font-script: "Yellowtail", "Segoe Script", cursive;
+    --font-script: "Syne", "Poppins", sans-serif;
 
     --nav-height: 84px;
     --transition: 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -88,7 +88,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 .gold,
 .gold strong { background: linear-gradient(120deg, var(--gold) 10%, var(--gold-light) 55%, var(--gold) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .blue-grad { background: linear-gradient(120deg, var(--blue), var(--blue-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.script { font-family: var(--font-script); font-weight: 400; letter-spacing: 0.01em; }
+.script { font-family: var(--font-script); font-weight: 800; letter-spacing: -0.01em; }
 .gold .script, .script.gold { background: linear-gradient(120deg, var(--gold), var(--gold-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
@@ -240,7 +240,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 .dash { display: inline-block; width: 54px; height: 1px; background: linear-gradient(90deg, rgba(245,185,66,0.9), transparent); }
 
 .hero-title { font-size: clamp(2.7rem, 5.6vw, 4.6rem); font-weight: 700; margin-bottom: 22px; }
-.hero-title .script { font-size: 1.12em; line-height: 1; display: inline-block; transform: rotate(-3deg); }
+.hero-title .script { font-size: 1.05em; line-height: 1; display: inline-block; transform: none; }
 
 .hero-lead { max-width: 520px; font-size: clamp(1rem, 1.4vw, 1.1rem); margin-bottom: 32px; }
 
@@ -263,12 +263,12 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 .hero-visual { position: relative; min-height: 480px; display: grid; place-items: center; }
 .hero-logo-3d {
     width: min(100%, 560px);
-    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.55));
+    height: auto; /* keep the artwork's exact 1600x963 proportions */
+    border-radius: 26px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 55px rgba(245, 185, 66, 0.16), 0 0 70px rgba(22, 139, 255, 0.16);
     animation: floaty 7s ease-in-out infinite;
-    mix-blend-mode: screen; /* assets are rendered on pure black — dissolves into the dark backdrop */
 }
-.hero-island { position: absolute; top: -4%; right: -4%; width: 44%; opacity: 0.9; mix-blend-mode: screen; animation: floaty 9s ease-in-out infinite; }
-.hero-plant { position: absolute; bottom: -4%; left: -4%; width: 30%; mix-blend-mode: screen; animation: floaty 8s ease-in-out infinite reverse; }
 
 .glass-card {
     background: linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.035));
@@ -331,6 +331,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 .eyebrow.framed::before,
 .eyebrow.framed::after { content: ""; width: 46px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
 .eyebrow.framed::after { background: linear-gradient(90deg, var(--gold), transparent); }
+.founders .eyebrow.framed { color: var(--text-primary); font-size: 1rem; letter-spacing: 0.3em; }
 
 .section-sub { font-size: 1.02rem; max-width: 640px; margin-inline: auto; }
 .section-head.centered .section-sub { margin-inline: auto; }
@@ -909,6 +910,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
     .founders-banner { letter-spacing: 0.2em; font-size: 0.7rem; }
     .eyebrow.framed { letter-spacing: 0.26em; font-size: 0.74rem; }
     .eyebrow.framed::before, .eyebrow.framed::after { width: 24px; }
+    .founders .eyebrow.framed { font-size: 0.85rem; letter-spacing: 0.2em; }
 
     .cta-inner { flex-direction: column; text-align: center; }
     .cta-inner .btn { width: 100%; }

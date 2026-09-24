@@ -18,10 +18,15 @@ public class HomeController : Controller
     [HttpGet("/")]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
+        var featured = await _projects.GetFeaturedAsync(4, cancellationToken);
+
         var viewModel = new HomeViewModel
         {
             Skills = await _content.GetActiveSkillsAsync(cancellationToken),
-            FeaturedProjects = await _projects.GetFeaturedAsync(4, cancellationToken),
+            FeaturedProjects = featured,
+            DnaProjects = featured.Select(ProjectDnaBuilder.Build)
+                .Where(p => p.Nodes.Count > 0)
+                .ToList(),
             Founders = await _content.GetActiveFoundersAsync(cancellationToken),
             Services = await _content.GetActiveServicesAsync(cancellationToken),
             TotalPublishedProjects = await _content.CountPublishedProjectsAsync(cancellationToken)

@@ -1,0 +1,160 @@
+@model IReadOnlyList<ProjectDnaViewModel>
+@{
+    var first = Model.First();
+    var dnaJson = System.Text.Json.JsonSerializer.Serialize(Model, new System.Text.Json.JsonSerializerOptions
+    {
+        PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase
+    });
+}
+
+<section class="section project-dna" id="dna" data-dna-root data-projects="@dnaJson">
+    <div class="dna-ambient" aria-hidden="true">
+        <span class="dna-orb dna-orb-gold"></span>
+        <span class="dna-orb dna-orb-blue"></span>
+    </div>
+
+    <div class="container">
+        <div class="section-head centered" data-reveal>
+            <span class="eyebrow framed">Project DNA</span>
+            <h2>Every Project Has Its Own <span class="gold script">DNA</span></h2>
+            <p class="section-sub">
+                Peek under the hood — the living structure behind each product we ship.
+            </p>
+        </div>
+
+        @if (Model.Count > 1)
+        {
+            <div class="dna-switcher" role="tablist" aria-label="Choose a project" data-reveal>
+                @for (var i = 0; i < Model.Count; i++)
+                {
+                    <button type="button"
+                            class="dna-switch-btn @(i == 0 ? "is-active" : "")"
+                            role="tab"
+                            aria-selected="@(i == 0)"
+                            data-dna-switch="@i">@Model[i].Title</button>
+                }
+            </div>
+        }
+
+        <div class="dna-layout" data-reveal>
+            <!-- ===================== LEFT: project preview ===================== -->
+            <div class="dna-preview-col">
+                <div class="dna-browser-wrap">
+                    <div class="dna-browser-glow" aria-hidden="true"></div>
+                    <div class="dna-browser" data-dna-browser>
+                        <div class="dna-browser-bar">
+                            <span class="win-dots"><i></i><i></i><i></i></span>
+                            <span class="dna-browser-url" data-dna-url>ze.dev/@first.Slug</span>
+                            <span class="dna-browser-secure"><i class="fa-solid fa-lock"></i></span>
+                        </div>
+                        <div class="dna-browser-viewport">
+                            <img src="@(string.IsNullOrEmpty(first.ImageUrl) ? Url.Content("~/images/browser-window.png") : first.ImageUrl)"
+                                 alt="@first.Title — project preview"
+                                 data-dna-image />
+                            <div class="dna-browser-sheen" aria-hidden="true"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dna-preview-meta">
+                    <h3 class="dna-preview-title" data-dna-title>@first.Title</h3>
+                    <p class="dna-preview-desc" data-dna-desc>@first.ShortDescription</p>
+                    <div class="dna-preview-actions">
+                        <a class="btn btn-sm btn-gold" href="/projects/@first.Slug" data-dna-case>
+                            Case Study <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        @if (!string.IsNullOrEmpty(first.LiveUrl))
+                        {
+                            <a class="btn btn-sm btn-ghost" href="@first.LiveUrl" target="_blank" rel="noopener" data-dna-live>
+                                Live <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-ghost" href="#" target="_blank" rel="noopener" data-dna-live hidden>
+                                Live <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        }
+                        @if (!string.IsNullOrEmpty(first.GithubUrl))
+                        {
+                            <a class="btn btn-sm btn-ghost icon-only" href="@first.GithubUrl" target="_blank" rel="noopener"
+                               aria-label="GitHub repository for @first.Title" data-dna-github>
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-ghost icon-only" href="#" target="_blank" rel="noopener"
+                               aria-label="GitHub repository" data-dna-github hidden>
+                                <i class="fa-brands fa-github"></i>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===================== RIGHT: DNA helix ===================== -->
+            <div class="dna-helix-col">
+                <div class="dna-helix-head">
+                    <span class="dna-helix-kicker"><i class="fa-solid fa-diagram-project"></i> PROJECT DNA</span>
+                    <span class="dna-helix-slug" data-dna-slug>/@first.Slug</span>
+                </div>
+
+                <div class="dna-helix" data-dna-helix>
+                    <svg class="dna-spine" data-dna-spine aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="dnaSpineGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#F5B942" />
+                                <stop offset="45%" stop-color="#38A7FF" />
+                                <stop offset="100%" stop-color="#F5B942" />
+                            </linearGradient>
+                            <filter id="dnaSpineGlow" x="-60%" y="-10%" width="220%" height="120%">
+                                <feGaussianBlur stdDeviation="3.2" result="blur" />
+                                <feMerge>
+                                    <feMergeNode in="blur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <path class="dna-spine-path" data-dna-path fill="none"
+                              stroke="url(#dnaSpineGrad)" stroke-width="2"
+                              stroke-linecap="round" filter="url(#dnaSpineGlow)" />
+                        <circle class="dna-particle-halo" data-dna-halo r="7" fill="rgba(56,167,255,0.28)" opacity="0" />
+                        <circle class="dna-particle" data-dna-particle r="3.2" fill="#FFD36A" opacity="0" />
+                    </svg>
+
+                    <div class="dna-nodes" data-dna-nodes>
+                        @foreach (var node in first.Nodes)
+                        {
+                            <div class="dna-node" data-side="@node.Side" data-key="@node.Key"
+                                 tabindex="0"
+                                 aria-label="@node.Label: @string.Join(", ", node.Technologies)">
+                                <span class="dna-node-branch" aria-hidden="true"></span>
+                                <span class="dna-node-dot" aria-hidden="true">
+                                    <span class="dna-node-dot-core"></span>
+                                </span>
+                                <div class="dna-node-card">
+                                    <span class="dna-node-icon"><i class="@node.Icon"></i></span>
+                                    <span class="dna-node-label">@node.Label</span>
+                                    <span class="dna-node-peek">@string.Join(" • ", node.Technologies)</span>
+                                    <div class="dna-node-panel" role="tooltip">
+                                        <strong>@node.Label</strong>
+                                        <p>@string.Join(" • ", node.Technologies)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dna-signature" data-reveal>
+            <img src="~/images/ze-nav-logo.png" alt="ZE" class="dna-signature-mark" />
+            <p>
+                Different ideas. Different technologies.
+                <span class="gold script">One unique DNA.</span>
+            </p>
+        </div>
+    </div>
+</section>

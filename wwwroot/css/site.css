@@ -34,6 +34,7 @@
 
     --font-sans: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
     --font-script: "Syne", "Poppins", sans-serif;
+    --font-cursive: "Dancing Script", "Segoe Script", cursive;
 
     --nav-height: 84px;
     --transition: 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -223,6 +224,37 @@ p { margin: 0 0 1em; color: var(--text-muted); }
     overflow: hidden;
 }
 .hero-backdrop { position: absolute; inset: 0; pointer-events: none; }
+
+/* full-bleed ZE scene artwork (reference hero background) */
+.hero-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 65% center;
+}
+/* deep-navy wash so the left-hand copy stays legible over the artwork */
+.hero-backdrop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg,
+            rgba(5, 10, 20, 0.97) 0%,
+            rgba(5, 10, 20, 0.92) 28%,
+            rgba(7, 17, 31, 0.62) 48%,
+            rgba(7, 17, 31, 0.22) 70%,
+            rgba(7, 17, 31, 0.04) 88%,
+            rgba(7, 17, 31, 0) 100%),
+        linear-gradient(180deg,
+            rgba(5, 10, 20, 0.78) 0%,
+            rgba(5, 10, 20, 0.18) 18%,
+            rgba(5, 10, 20, 0) 46%,
+            rgba(5, 10, 20, 0.35) 82%,
+            rgba(5, 10, 20, 0.7) 100%);
+}
+
 #hero-particles { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.65; }
 .glow-orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.5; }
 .orb-gold { width: 420px; height: 420px; top: -120px; right: 8%; background: rgba(245, 185, 66, 0.34); animation: drift 16s ease-in-out infinite alternate; }
@@ -240,7 +272,16 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 .dash { display: inline-block; width: 54px; height: 1px; background: linear-gradient(90deg, rgba(245,185,66,0.9), transparent); }
 
 .hero-title { font-size: clamp(2.7rem, 5.6vw, 4.6rem); font-weight: 700; margin-bottom: 22px; }
-.hero-title .script { font-size: 1.05em; line-height: 1; display: inline-block; transform: none; }
+/* reference sets the accent word in a lighter script face, smaller than the sans line */
+.hero-title .script {
+    font-family: var(--font-cursive);
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1;
+    display: inline-block;
+    transform: none;
+}
 
 .hero-lead { max-width: 520px; font-size: clamp(1rem, 1.4vw, 1.1rem); margin-bottom: 32px; }
 
@@ -261,14 +302,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 
 /* hero visual composition */
 .hero-visual { position: relative; min-height: 480px; display: grid; place-items: center; }
-.hero-logo-3d {
-    width: min(100%, 560px);
-    height: auto; /* keep the artwork's exact 1600x963 proportions */
-    border-radius: 26px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 55px rgba(245, 185, 66, 0.16), 0 0 70px rgba(22, 139, 255, 0.16);
-    animation: floaty 7s ease-in-out infinite;
-}
+/* the artwork now lives full-bleed in .hero-backdrop; this column only hosts the glass cards */
 
 .glass-card {
     background: linear-gradient(150deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.035));
@@ -397,36 +431,35 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 /* -------------------------------- SKILLS -------------------------------- */
 .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 18px;
 }
 .skill-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 22px 10px;
-    overflow: hidden;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 16px 20px;
+    overflow: visible;
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.02));
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     backdrop-filter: var(--glass-blur);
-    text-align: center;
-    font-size: 0.9rem;
+    text-align: left;
+    font-size: 0.92rem;
     font-weight: 500;
     transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 .skill-card img {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
     display: block;
-    margin-inline: auto;
     flex-shrink: 0;
 }
-.skill-card i { font-size: 2.1rem; color: var(--blue-light); line-height: 1; }
-.skill-card span { max-width: 100%; }
+.skill-card i { width: 44px; flex-shrink: 0; text-align: center; font-size: 1.75rem; color: var(--blue-light); line-height: 1; }
+.skill-card span { min-width: 0; overflow-wrap: break-word; }
 .skill-card:hover { transform: translateY(-6px); border-color: rgba(245, 185, 66, 0.55); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 26px rgba(245, 185, 66, 0.16); }
 
 /* ------------------------------- PROJECTS -------------------------------- */
@@ -837,7 +870,6 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 @media (max-width: 1140px) {
     .hero-inner { grid-template-columns: 1fr; text-align: left; }
     .hero-visual { min-height: 420px; margin-top: 10px; }
-    .hero-logo-3d { width: min(92%, 480px); }
     .hero-lead { max-width: 640px; }
 }
 
@@ -899,7 +931,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 
     .projects-grid,
     .home-grid { grid-template-columns: 1fr; }
-    .skills-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; }
+    .skills-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
     .services-grid { grid-template-columns: 1fr; }
     .about-stats { grid-template-columns: 1fr; }
 
@@ -923,7 +955,7 @@ p { margin: 0 0 1em; color: var(--text-muted); }
     .brand-mark { height: 44px; }
     .hero-title { font-size: clamp(2rem, 12vw, 2.5rem); }
     .btn { padding: 13px 22px; font-size: 0.9rem; }
-    .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .skills-grid { grid-template-columns: minmax(0, 1fr); }
     .hero-card.card-3 { display: none; }
     .projects-grid, .home-grid { grid-template-columns: minmax(0, 1fr); }
     .search-bar { flex-wrap: wrap; border-radius: 20px; padding: 12px 14px; }

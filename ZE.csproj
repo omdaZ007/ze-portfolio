@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ZE</RootNamespace>
     <AssemblyName>ZE</AssemblyName>
+    <UseAppHost>false</UseAppHost>
     <UserSecretsId>ze-portfolio-secrets</UserSecretsId>
     <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>

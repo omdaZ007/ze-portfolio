@@ -221,8 +221,10 @@
 
 /* ------------------------------- nodes ---------------------------------- */
 .dna-node {
+    --dna-branch: clamp(26px, 4vw, 52px);
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 18px minmax(0, 1fr);
     align-items: center;
     min-height: 64px;
     outline: none;
@@ -243,18 +245,12 @@
 .project-dna.is-revealed .dna-node:nth-child(6) { transition-delay: 0.65s; }
 .project-dna.is-revealed .dna-node:nth-child(7) { transition-delay: 0.77s; }
 
-/* sides */
-.dna-node[data-side="right"] { justify-content: flex-end; }
-.dna-node[data-side="left"] { justify-content: flex-start; }
-
-/* central dot sits on the spine (50%) */
+/* central dot sits on the spine (grid column 2 = exact 50%) */
 .dna-node-dot {
-    position: absolute;
-    left: 50%;
-    top: 50%;
+    grid-column: 2;
+    justify-self: center;
     width: 18px;
     height: 18px;
-    margin: -9px 0 0 -9px;
     border-radius: 50%;
     background: var(--bg-primary);
     border: 2px solid rgba(56, 167, 255, 0.7);
@@ -287,15 +283,15 @@
     position: absolute;
     top: 50%;
     height: 1.5px;
-    width: clamp(26px, 4vw, 52px);
+    width: var(--dna-branch);
     background: linear-gradient(90deg, rgba(56, 167, 255, 0.15), rgba(56, 167, 255, 0.75));
     transform: scaleX(0);
     transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1), background 0.35s ease, box-shadow 0.35s ease;
     z-index: 2;
 }
-.dna-node[data-side="right"] .dna-node-branch { left: 50%; transform-origin: left center; }
+.dna-node[data-side="right"] .dna-node-branch { left: calc(50% + 9px); transform-origin: left center; }
 .dna-node[data-side="left"] .dna-node-branch {
-    right: 50%;
+    right: calc(50% + 9px);
     transform-origin: right center;
     background: linear-gradient(90deg, rgba(56, 167, 255, 0.75), rgba(56, 167, 255, 0.15));
 }
@@ -312,14 +308,14 @@
     background: linear-gradient(90deg, var(--gold), rgba(245, 185, 66, 0.3));
 }
 
-/* card */
+/* card — lives in side column, never crosses the spine */
 .dna-node-card {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: 12px;
     padding: 13px 18px;
-    min-width: clamp(180px, 24vw, 240px);
+    min-width: min(clamp(180px, 24vw, 240px), calc(100% - var(--dna-branch)));
     background: linear-gradient(150deg, rgba(13, 27, 49, 0.92), rgba(7, 17, 31, 0.92));
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 14px;
@@ -328,8 +324,18 @@
     transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
         border-color 0.35s ease, box-shadow 0.35s ease;
 }
-.dna-node[data-side="right"] .dna-node-card { margin-right: clamp(40px, 6vw, 74px); }
-.dna-node[data-side="left"] .dna-node-card { margin-left: clamp(40px, 6vw, 74px); }
+.dna-node[data-side="right"] .dna-node-card {
+    grid-column: 3;
+    justify-self: start;
+    margin-left: var(--dna-branch);
+    max-width: calc(100% - var(--dna-branch));
+}
+.dna-node[data-side="left"] .dna-node-card {
+    grid-column: 1;
+    justify-self: end;
+    margin-right: var(--dna-branch);
+    max-width: calc(100% - var(--dna-branch));
+}
 
 .dna-node:hover .dna-node-card,
 .dna-node:focus-visible .dna-node-card,
@@ -464,7 +470,7 @@
     .dna-browser { transform: none; animation: dnaFloatFlat 8s ease-in-out infinite; }
     .dna-browser:hover { transform: translateY(-6px) translateZ(0); }
     .dna-node-peek { display: inline; }
-    .dna-node-card { min-width: clamp(200px, 46vw, 280px); }
+    .dna-node-card { min-width: min(clamp(200px, 46vw, 280px), calc(100% - var(--dna-branch))); }
     .dna-node-panel { max-width: 260px; }
 }
 
@@ -475,20 +481,27 @@
     .dna-helix-head { flex-direction: column; align-items: flex-start; gap: 6px; }
 
     /* vertical timeline: spine left, all cards right */
-    .dna-node { justify-content: flex-start; padding-left: 44px; min-height: 56px; }
-    .dna-node-dot { left: 16px; margin-left: -9px; }
+    .dna-node {
+        grid-template-columns: 18px minmax(0, 1fr);
+        column-gap: 28px;
+        min-height: 56px;
+    }
+    .dna-node-dot { grid-column: 1; }
     .dna-node-branch {
-        left: 16px !important;
+        left: 18px !important;
         right: auto !important;
-        width: 24px;
+        width: 28px;
         transform-origin: left center !important;
     }
     .dna-node[data-side="right"] .dna-node-card,
     .dna-node[data-side="left"] .dna-node-card {
+        grid-column: 2;
+        justify-self: stretch;
         margin-left: 0;
         margin-right: 0;
         min-width: 0;
-        width: 100%;
+        max-width: none;
+        width: auto;
     }
     .dna-node-card { padding: 12px 14px; }
     .dna-node-peek { display: none; }

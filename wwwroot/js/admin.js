@@ -6,19 +6,93 @@
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* ---------- sidebar (mobile) ---------- */
+    /* ---------- sidebar ---------- */
     var sidebar = document.getElementById("adminSidebar");
     var burger = document.getElementById("adminSidebarToggle");
+    var collapseBtn = document.getElementById("adminSidebarCollapse");
+    var backdrop = document.getElementById("adminSidebarBackdrop");
+    var STORAGE_KEY = "zeAdminSidebarCollapsed";
+    var desktopMq = window.matchMedia("(min-width: 901px)");
+
+    function isDesktop() { return desktopMq.matches; }
+
+    function applyBackdrop(show) {
+        if (!backdrop) return;
+        backdrop.classList.toggle("show", !!show);
+    }
+
+    if (sidebar) {
+        try {
+            if (localStorage.getItem(STORAGE_KEY) === "1" && isDesktop()) {
+                sidebar.classList.add("collapsed");
+            }
+        } catch (e) { /* ignore */ }
+    }
+
+    function setCollapsed(collapsed) {
+        if (!sidebar) return;
+        sidebar.classList.toggle("collapsed", collapsed);
+        try {
+            localStorage.setItem(STORAGE_KEY, collapsed ? "1" : "0");
+        } catch (e) { /* ignore */ }
+        if (collapseBtn) {
+            collapseBtn.setAttribute("aria-label", collapsed ? "Expand sidebar" : "Collapse sidebar");
+            collapseBtn.setAttribute("title", collapsed ? "Expand sidebar" : "Collapse sidebar");
+        }
+    }
+
+    if (collapseBtn && sidebar) {
+        collapseBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (!isDesktop()) return;
+            setCollapsed(!sidebar.classList.contains("collapsed"));
+        });
+    }
+
     if (burger && sidebar) {
         burger.addEventListener("click", function () {
-            sidebar.classList.toggle("open");
+            if (isDesktop()) {
+                setCollapsed(!sidebar.classList.contains("collapsed"));
+            } else {
+                var open = sidebar.classList.toggle("open");
+                applyBackdrop(open);
+            }
         });
         document.addEventListener("click", function (e) {
+            if (isDesktop()) return;
             if (!sidebar.classList.contains("open")) return;
             if (sidebar.contains(e.target) || burger.contains(e.target)) return;
             sidebar.classList.remove("open");
+            applyBackdrop(false);
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && !isDesktop() && sidebar.classList.contains("open")) {
+                sidebar.classList.remove("open");
+                applyBackdrop(false);
+            }
         });
     }
+
+    if (backdrop) {
+        backdrop.addEventListener("click", function () {
+            sidebar && sidebar.classList.remove("open");
+            applyBackdrop(false);
+        });
+    }
+
+    desktopMq.addEventListener("change", function (e) {
+        if (e.matches) {
+            sidebar && sidebar.classList.remove("open");
+            applyBackdrop(false);
+            try {
+                if (localStorage.getItem(STORAGE_KEY) === "1") {
+                    sidebar && sidebar.classList.add("collapsed");
+                }
+            } catch (err) { /* ignore */ }
+        } else {
+            sidebar && sidebar.classList.remove("collapsed");
+        }
+    });
 
     /* ---------- auto-dismiss alerts ---------- */
     document.querySelectorAll("[data-auto-dismiss]").forEach(function (alert) {

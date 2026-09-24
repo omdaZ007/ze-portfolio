@@ -18,41 +18,44 @@
         <aside class="admin-sidebar" id="adminSidebar">
             <div class="admin-brand">
                 <img src="~/images/ze-nav-logo.png" alt="ZE" />
-                <div>
+                <div class="admin-brand-text">
                     <strong>ZE Admin</strong>
                     <span>Content Manager</span>
                 </div>
             </div>
             <nav class="admin-nav">
-                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@(IsActiveNav("Dashboard") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="@(IsActiveNav("Dashboard") ? "active" : "")" title="Dashboard">
                     <i class="fa-solid fa-chart-pie"></i><span>Dashboard</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="@(IsActiveNav("Projects") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Projects" asp-action="Index" class="@(IsActiveNav("Projects") ? "active" : "")" title="Projects">
                     <i class="fa-solid fa-folder-open"></i><span>Projects</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Technologies" asp-action="Index" class="@(IsActiveNav("Technologies") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Technologies" asp-action="Index" class="@(IsActiveNav("Technologies") ? "active" : "")" title="Technologies">
                     <i class="fa-solid fa-microchip"></i><span>Technologies</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="@(IsActiveNav("Skills") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Skills" asp-action="Index" class="@(IsActiveNav("Skills") ? "active" : "")" title="Skills">
                     <i class="fa-solid fa-bolt"></i><span>Skills</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Services" asp-action="Index" class="@(IsActiveNav("Services") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Services" asp-action="Index" class="@(IsActiveNav("Services") ? "active" : "")" title="Services">
                     <i class="fa-solid fa-layer-group"></i><span>Services</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Founders" asp-action="Index" class="@(IsActiveNav("Founders") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Founders" asp-action="Index" class="@(IsActiveNav("Founders") ? "active" : "")" title="Founders">
                     <i class="fa-solid fa-user-group"></i><span>Founders</span>
                 </a>
-                <a asp-area="Admin" asp-controller="Messages" asp-action="Index" class="@(IsActiveNav("Messages") ? "active" : "")">
+                <a asp-area="Admin" asp-controller="Messages" asp-action="Index" class="@(IsActiveNav("Messages") ? "active" : "")" title="Messages">
                     <i class="fa-solid fa-envelope"></i><span>Messages</span>
                     @await Component.InvokeAsync("UnreadMessageBadge")
                 </a>
             </nav>
             <div class="admin-sidebar-footer">
-                <a href="~/" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View site</a>
+                <a href="~/" target="_blank" title="View site"><i class="fa-solid fa-arrow-up-right-from-square"></i> <span>View site</span></a>
                 <form asp-area="Admin" asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                    <button type="submit"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+                    <button type="submit" title="Logout"><i class="fa-solid fa-right-from-bracket"></i> <span>Logout</span></button>
                 </form>
             </div>
+            <button type="button" class="admin-sidebar-collapse" id="adminSidebarCollapse" aria-label="Collapse sidebar" title="Collapse sidebar">
+                <i class="fa-solid fa-angles-left"></i>
+            </button>
         </aside>
 
         <div class="admin-main">
@@ -87,6 +90,7 @@
             </main>
         </div>
     </div>
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
 
     <script src="~/js/admin.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

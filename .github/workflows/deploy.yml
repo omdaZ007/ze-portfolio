@@ -1,0 +1,88 @@
+name: Deploy to MonsterASP
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monsterasp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publish
+        run: dotnet publish ZE.csproj -c Release -o publish
+
+      - name: Deploy via FTP (maintenance flow)
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          set -euo pipefail
+          FTP="ftp://${FTP_HOST}"
+          CURL=(curl --fail --show-error --silent --user "${FTP_USER}:${FTP_PASS}")
+
+          # 1. Maintenance page first so IIS releases ZE.dll
+          cat > app_offline.htm <<'EOF'
+          <!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="10"><title>Updating</title></head><body style="background:#050A14;color:#8B9BB4;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0"><div style="text-align:center"><div style="font-size:28px;color:#F5B942;margin-bottom:8px">ZE</div><div>Upgrading the system... back in a few seconds.</div></div></body></html>
+          EOF
+          "${CURL[@]}" -T app_offline.htm "${FTP}/wwwroot/app_offline.htm"
+          echo "Waiting for the worker to stop..."
+          sleep 10
+
+          # 2. App binaries — sequential uploads only (racing once produced a 0-byte ZE.dll).
+          #    web.config and appsettings*.json are intentionally NEVER uploaded:
+          #    they carry server-only protection (connection string fallback + stdout logging).
+          for f in ZE.dll ZE.deps.json ZE.runtimeconfig.json; do
+            "${CURL[@]}" --ftp-create-dirs -T "publish/$f" "${FTP}/wwwroot/$f"
+            echo "uploaded $f"
+          done
+
+          # 3. Static assets — upload only, never delete (server has extra files: uploads/, logs/)
+          find publish/wwwroot -type f | while read -r file; do
+            rel="${file#publish/wwwroot/}"
+            "${CURL[@]}" --ftp-create-dirs -T "$file" "${FTP}/wwwroot/wwwroot/${rel}"
+          done
+          echo "static assets uploaded"
+
+          # 4. Take the site back online
+          "${CURL[@]}" -Q "DELE /wwwroot/app_offline.htm" -o /dev/null "${FTP}/" || true
+          echo "maintenance page removed"
+
+      - name: Ensure site online
+        if: always()
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USER: ${{ secrets.FTP_USER }}
+          FTP_PASS: ${{ secrets.FTP_PASS }}
+        run: |
+          curl --fail --show-error --silent --user "${FTP_USER}:${FTP_PASS}" \
+            -Q "DELE /wwwroot/app_offline.htm" -o /dev/null "ftp://${FTP_HOST}/" || true
+
+      - name: Health check
+        if: always()
+        run: |
+          for i in $(seq 1 12); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 https://ze-portfolio.runasp.net || true)
+            echo "attempt $i -> $code"
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "::error::Site not healthy after deploy"
+          exit 1

@@ -307,6 +307,30 @@
             @foreach (var founder in Model.Founders)
             {
                 var isGold = founder.AccentColor.StartsWith("#F5") || founder.AccentColor.StartsWith("#FFD");
+
+                // The seed stored bare profile roots ("https://github.com/", "https://www.linkedin.com/")
+                // as placeholders. Treat those as "not set" and fall back to the founder's real profile.
+                // Any profile URL the admin actually saves (path beyond the site root) keeps priority,
+                // so this never overrides admin-managed content and never writes to the database.
+                Func<string?, string, string> resolveSocial = (stored, fallback) =>
+                {
+                    var value = (stored ?? string.Empty).Trim();
+                    if (value.Length == 0) return fallback;
+                    if (Uri.TryCreate(value, UriKind.Absolute, out var uri)
+                        && string.IsNullOrEmpty(uri.AbsolutePath.Trim('/'))
+                        && string.IsNullOrEmpty(uri.Query))
+                    {
+                        return fallback;
+                    }
+                    return value;
+                };
+                var isZiad = founder.Name.IndexOf("Ziad", StringComparison.OrdinalIgnoreCase) >= 0;
+                var githubUrl = resolveSocial(founder.GithubUrl,
+                    isZiad ? "https://github.com/ziadfayad871" : "https://github.com/omdaZ007");
+                var linkedInUrl = resolveSocial(founder.LinkedInUrl, isZiad
+                    ? "https://www.linkedin.com/in/zeyad-youssef-62ba95354?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+                    : "https://www.linkedin.com/in/omdaz/");
+
                 <article class="founder-card @(isGold ? "accent-gold" : "accent-blue")" data-reveal>
                     <div class="founder-photo">
                         @if (!string.IsNullOrEmpty(founder.ImageUrl))
@@ -335,13 +359,13 @@
                         <p class="founder-bio">@founder.Bio</p>
 
                         <div class="founder-links">
-                            @if (!string.IsNullOrEmpty(founder.GithubUrl))
+                            @if (!string.IsNullOrEmpty(githubUrl))
                             {
-                                <a href="@founder.GithubUrl" target="_blank" rel="noopener" aria-label="@founder.Name on GitHub"><i class="fa-brands fa-github"></i></a>
+                                <a href="@githubUrl" target="_blank" rel="noopener" aria-label="@founder.Name on GitHub"><i class="fa-brands fa-github"></i></a>
                             }
-                            @if (!string.IsNullOrEmpty(founder.LinkedInUrl))
+                            @if (!string.IsNullOrEmpty(linkedInUrl))
                             {
-                                <a href="@founder.LinkedInUrl" target="_blank" rel="noopener" aria-label="@founder.Name on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                                <a href="@linkedInUrl" target="_blank" rel="noopener" aria-label="@founder.Name on LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
                             }
                         </div>
                     </div>

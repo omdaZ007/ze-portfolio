@@ -47,7 +47,7 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 
 body {
     margin: 0;
@@ -281,9 +281,9 @@ p { margin: 0 0 1em; color: var(--text-muted); }
 /* reference sets the accent word in a lighter script face, smaller than the sans line */
 .hero-title .script {
     font-family: var(--font-cursive);
-    font-size: 0.8em;
-    font-weight: 700;
-    letter-spacing: 0;
+    font-size: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     line-height: 1;
     display: inline-block;
     transform: none;
@@ -499,7 +499,9 @@ p { margin: 0 0 1em; color: var(--text-muted); }
     flex-shrink: 0;
     transition: transform var(--transition), filter var(--transition);
 }
-.skill-card i { width: 44px; flex-shrink: 0; text-align: center; font-size: 1.75rem; color: var(--blue-light); line-height: 1; transition: transform var(--transition), filter var(--transition); }
+/* icon glyphs must occupy the same 44x44 box as .skill-card img so every card
+   in a grid row ends up the same height (img cards were 78px, glyph cards 62px) */
+.skill-card i { width: 44px; height: 44px; flex-shrink: 0; text-align: center; font-size: 1.75rem; color: var(--blue-light); line-height: 44px; transition: transform var(--transition), filter var(--transition); }
 .skill-card span { min-width: 0; overflow-wrap: break-word; }
 .skill-card:hover { transform: translateY(-6px); border-color: rgba(245, 185, 66, 0.55); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 26px rgba(245, 185, 66, 0.16); }
 .skill-card:hover img { transform: scale(1.14); filter: drop-shadow(0 6px 16px rgba(245, 185, 66, 0.4)); }

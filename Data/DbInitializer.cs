@@ -105,8 +105,8 @@ public static class DbInitializer
                 Bio = "Passionate about building modern web applications and turning ideas into real products. I love clean code, creative design and continuous learning.",
                 ImageUrl = "/uploads/founders/ziad.png",
                 AccentColor = "#F5B942",
-                GithubUrl = "https://github.com/",
-                LinkedInUrl = "https://www.linkedin.com/",
+                GithubUrl = "https://github.com/ziadfayad871",
+                LinkedInUrl = "https://www.linkedin.com/in/zeyad-youssef-62ba95354?utm_source=share_via&utm_content=profile&utm_medium=member_android",
                 DisplayOrder = 1,
                 IsActive = true
             },
@@ -118,8 +118,8 @@ public static class DbInitializer
                 Bio = "Focused on turning ideas into real opportunities. I combine technical skills with business strategy to build sustainable and impactful products.",
                 ImageUrl = "/uploads/founders/mohamed.png",
                 AccentColor = "#168BFF",
-                GithubUrl = "https://github.com/",
-                LinkedInUrl = "https://www.linkedin.com/",
+                GithubUrl = "https://github.com/omdaZ007",
+                LinkedInUrl = "https://www.linkedin.com/in/omdaz/",
                 DisplayOrder = 2,
                 IsActive = true
             });

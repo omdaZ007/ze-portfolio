@@ -14,13 +14,13 @@
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var seen = false;
-    try { seen = !!sessionStorage.getItem('ze-build-mode'); } catch (e) { }
+    try { seen = !!sessionStorage.getItem('ze-build-mode-v2'); } catch (e) { }
 
     var finished = false;
     var locked = false;
 
     function markSeen() {
-        try { sessionStorage.setItem('ze-build-mode', '1'); } catch (e) { }
+        try { sessionStorage.setItem('ze-build-mode-v2', '1'); } catch (e) { }
     }
 
     function setContentInert(on) {
@@ -44,11 +44,12 @@
         setContentInert(false);
     }
 
-    /* immediate dismissal (seen / reduced motion / no GSAP) */
+    /* immediate dismissal (seen / reduced motion / no GSAP) — never marks
+       as seen: if it could not play (no GSAP) it must be allowed to play
+       on a later visit when GSAP is available. */
     function dismissNow() {
         if (finished) return;
         finished = true;
-        markSeen();
         docEl.classList.remove('bm-armed', 'bm-lock');
         docEl.classList.add('bm-done');
         setContentInert(false);

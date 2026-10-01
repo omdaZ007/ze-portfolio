@@ -5,8 +5,9 @@
    ========================================================================= *@
 <script>
     (function () {
+        var force = /[?&]bm=1(?:&|$)/.test(location.search);
         try {
-            if (sessionStorage.getItem('ze-build-mode-v2')) {
+            if (!force && sessionStorage.getItem('ze-build-mode-v2')) {
                 document.documentElement.classList.add('bm-done');
             } else {
                 document.documentElement.classList.add('bm-armed');
@@ -14,6 +15,16 @@
         } catch (e) {
             document.documentElement.classList.add('bm-armed');
         }
+        /* watchdog: if the timeline never starts, never leave the overlay stuck */
+        setTimeout(function () {
+            var h = document.documentElement;
+            if (h.classList.contains('bm-armed') && !h.classList.contains('bm-started')) {
+                h.classList.remove('bm-armed');
+                h.classList.add('bm-done');
+                var o = document.querySelector('.build-mode');
+                if (o && o.parentNode) o.parentNode.removeChild(o);
+            }
+        }, 7000);
     })();
 </script>
 
